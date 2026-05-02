@@ -14,7 +14,7 @@ from .models    import Organization, Role
 from .simulator import KPVSimulator, SimulationResult
 from .optimizer import BenchOptimizer, OptimizationResult
 
-__version__  = "1.0.0"
+__version__  = "1.2.0"
 __author__   = "Robert J. Green"
 __email__    = "robert@rjgreenresearch.org"
 __license__  = "Apache-2.0"

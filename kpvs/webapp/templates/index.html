@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KPVS — Key Person Vulnerability Simulator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" crossorigin="anonymous"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;background:#0f1117;color:#e2e8f0;min-height:100vh;display:flex;flex-direction:column}
+
+/* ── Top bar ── */
+.topbar{background:#1a1a2e;border-bottom:1px solid #2d2d4e;padding:0 20px;height:52px;display:flex;align-items:center;gap:16px;flex-shrink:0}
+.topbar .logo{font-size:15px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.topbar .logo span{color:#f97316}
+.topbar .version{font-size:10px;color:#64748b;background:#0f1117;padding:2px 7px;border-radius:4px;border:1px solid #2d2d4e}
+.topbar .subtitle{font-size:11px;color:#475569;margin-left:4px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.topbar .run-btn{background:#f97316;color:#fff;border:none;padding:7px 18px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;transition:background .15s}
+.topbar .run-btn:hover{background:#ea6900}
+.topbar .run-btn:disabled{background:#374151;color:#6b7280;cursor:not-allowed}
+
+/* ── Layout ── */
+.layout{display:flex;flex:1;overflow:hidden;height:calc(100vh - 52px)}
+
+/* ── Sidebar ── */
+.sidebar{width:240px;background:#13131f;border-right:1px solid #1e1e30;display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-section{padding:12px 0}
+.sidebar-section h3{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#475569;padding:0 14px 8px}
+.org-item{padding:8px 14px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .1s;border-left:3px solid transparent}
+.org-item:hover{background:#1a1a2e;border-left-color:#374151}
+.org-item.active{background:#1a2035;border-left-color:#f97316}
+.org-item .org-name{font-size:12px;color:#cbd5e1;flex:1;line-height:1.3}
+.org-item .org-badges{display:flex;gap:3px;flex-shrink:0}
+.badge{display:inline-block;padding:1px 5px;border-radius:3px;font-size:9px;font-weight:700}
+.badge.t1{background:#450a0a;color:#fca5a5}
+.badge.t2{background:#451a03;color:#fdba74}
+.badge.adv{background:#451a03;color:#fb923c}
+.sidebar-divider{height:1px;background:#1e1e30;margin:4px 0}
+
+/* ── Main content ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── Tabs ── */
+.tabs{display:flex;background:#13131f;border-bottom:1px solid #1e1e30;padding:0 20px;flex-shrink:0}
+.tab{padding:12px 16px;font-size:12px;font-weight:600;color:#475569;cursor:pointer;border-bottom:2px solid transparent;transition:color .15s}
+.tab:hover{color:#94a3b8}
+.tab.active{color:#f97316;border-bottom-color:#f97316}
+
+/* ── Panels ── */
+.panel{flex:1;overflow-y:auto;padding:20px;display:none}
+.panel.active{display:block}
+
+/* ── Section header ── */
+.section-hdr{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.section-hdr h2{font-size:13px;font-weight:700;color:#e2e8f0;text-transform:uppercase;letter-spacing:.06em}
+.section-hdr .hint{font-size:11px;color:#475569}
+
+/* ── Cards row ── */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.card{background:#1a1a2e;border:1px solid #2d2d4e;border-radius:8px;padding:14px 16px}
+.card .lbl{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.card .val{font-size:22px;font-weight:800;line-height:1}
+.card .sub{font-size:10px;color:#475569;margin-top:3px}
+.val.danger{color:#f87171}
+.val.warn{color:#fb923c}
+.val.good{color:#4ade80}
+.val.info{color:#60a5fa}
+
+/* ── Org editor table ── */
+.org-name-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.org-name-bar input{background:#1e1e30;border:1px solid #2d2d4e;color:#e2e8f0;padding:7px 12px;border-radius:6px;font-size:13px;flex:1}
+.org-name-bar input:focus{outline:none;border-color:#f97316}
+
+.editor-table{width:100%;border-collapse:collapse;background:#1a1a2e;border-radius:8px;overflow:hidden;font-size:12px}
+.editor-table th{background:#13131f;color:#64748b;padding:9px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.editor-table th.right{text-align:right}
+.editor-table td{padding:7px 10px;border-bottom:1px solid #1e1e30;vertical-align:middle}
+.editor-table tr:last-child td{border-bottom:none}
+.editor-table tr:hover td{background:#1e1e30}
+.editor-table tr.mc td:first-child::after{content:'★';color:#f97316;margin-left:4px;font-size:10px}
+
+.editable{background:transparent;border:1px solid transparent;color:#e2e8f0;padding:3px 6px;border-radius:4px;width:100%;font-size:12px;text-align:right}
+.editable:focus{outline:none;background:#0f1117;border-color:#f97316}
+.editable.name{text-align:left;width:180px}
+.kpci-val{font-weight:700;font-size:13px;text-align:right}
+.kpci-bar-wrap{display:flex;align-items:center;gap:6px}
+.kpci-bar-bg{flex:1;background:#0f1117;border-radius:2px;height:6px;overflow:hidden;min-width:60px}
+.kpci-bar{height:6px;border-radius:2px;transition:width .2s}
+
+/* row actions */
+.row-del{background:none;border:none;color:#374151;cursor:pointer;font-size:14px;padding:2px 6px;border-radius:3px;transition:color .1s}
+.row-del:hover{color:#f87171}
+.mc-toggle{background:none;border:1px solid #374151;color:#94a3b8;font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;transition:all .1s}
+.mc-toggle.on{border-color:#f97316;color:#f97316;background:#451a03}
+.add-role-btn{background:#1e1e30;border:1px dashed #374151;color:#64748b;padding:8px;width:100%;border-radius:6px;cursor:pointer;font-size:12px;margin-top:10px;transition:all .15s}
+.add-role-btn:hover{border-color:#f97316;color:#f97316}
+
+/* ── Parameters panel ── */
+.params-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:20px}
+.param-group{background:#1a1a2e;border:1px solid #2d2d4e;border-radius:8px;padding:16px}
+.param-group h3{font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.param-row{margin-bottom:12px}
+.param-row:last-child{margin-bottom:0}
+.param-row label{display:block;font-size:11px;color:#64748b;margin-bottom:5px}
+.param-row input[type=number],.param-row input[type=range]{width:100%}
+.param-row input[type=number]{background:#0f1117;border:1px solid #2d2d4e;color:#e2e8f0;padding:6px 10px;border-radius:5px;font-size:12px}
+.param-row input[type=number]:focus{outline:none;border-color:#f97316}
+.param-row input[type=range]{accent-color:#f97316;cursor:pointer}
+.range-val{font-size:11px;color:#f97316;font-weight:700;float:right}
+.param-row .checkbox-row{display:flex;align-items:center;gap:8px}
+.param-row input[type=checkbox]{accent-color:#f97316;width:14px;height:14px}
+.param-note{font-size:10px;color:#475569;margin-top:3px}
+
+/* ── Results panel ── */
+.results-empty{text-align:center;padding:60px 20px;color:#374151}
+.results-empty .icon{font-size:40px;margin-bottom:12px}
+.results-empty p{font-size:13px}
+
+.result-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.result-header h2{font-size:14px;font-weight:700;color:#e2e8f0}
+.result-header .run-id{font-size:10px;color:#475569;background:#0f1117;padding:3px 8px;border-radius:4px;font-family:monospace}
+.open-btn{background:#1e293b;border:1px solid #2d2d4e;color:#94a3b8;padding:6px 14px;border-radius:5px;font-size:11px;cursor:pointer;text-decoration:none;transition:all .15s}
+.open-btn:hover{border-color:#f97316;color:#f97316}
+
+.report-frame{width:100%;border:1px solid #2d2d4e;border-radius:8px;background:#fff;min-height:600px}
+
+/* ── Run history ── */
+.history-list{display:flex;flex-direction:column;gap:10px}
+.history-item{background:#1a1a2e;border:1px solid #2d2d4e;border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.history-item .hi-name{flex:1;font-size:13px;font-weight:600;color:#e2e8f0}
+.history-item .hi-meta{font-size:11px;color:#475569}
+.history-item .hi-gap{font-size:13px;font-weight:700;color:#f97316}
+.history-item .hi-t1{font-size:11px;color:#f87171}
+.history-empty{text-align:center;padding:40px;color:#374151;font-size:13px}
+
+/* ── Spinner ── */
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid #374151;border-top-color:#f97316;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Toast ── */
+#toast{position:fixed;bottom:24px;right:24px;background:#1e293b;border:1px solid #374151;color:#e2e8f0;padding:12px 20px;border-radius:8px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:999}
+#toast.show{opacity:1}
+#toast.error{border-color:#f87171;color:#f87171}
+
+/* ── Scrollbars ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#0f1117}
+::-webkit-scrollbar-thumb{background:#2d2d4e;border-radius:3px}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .sidebar{width:200px}
+  .params-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="logo">KPVS<span>.</span></div>
+  <span class="version">v1.1.0</span>
+  <span class="subtitle">Key Person Vulnerability Simulator · MTS Research Programme</span>
+  <div class="topbar-right">
+    <span id="run-status" style="font-size:11px;color:#64748b"></span>
+    <button class="run-btn" id="run-btn" onclick="executeRun()" disabled>
+      ▶ Run Simulation
+    </button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- Sidebar: org selector -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Examples</h3>
+      <div id="sidebar-examples"></div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <h3>Five Eyes</h3>
+      <div id="sidebar-fvey"></div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <h3>Adversarial</h3>
+      <div id="sidebar-adv"></div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <h3>Custom</h3>
+      <div style="padding:0 14px">
+        <label for="custom-json-upload"
+          style="display:block;background:#1e1e30;border:1px dashed #374151;color:#64748b;
+                 padding:10px;border-radius:6px;text-align:center;cursor:pointer;font-size:11px;
+                 transition:all .15s"
+          onmouseover="this.style.borderColor='#f97316';this.style.color='#f97316'"
+          onmouseout="this.style.borderColor='#374151';this.style.color='#64748b'">
+          📂 Upload JSON
+        </label>
+        <input type="file" id="custom-json-upload" accept=".json"
+               style="display:none" onchange="loadCustomJSON(event)">
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="main">
+    <div class="tabs">
+      <div class="tab active" onclick="showTab('org')">Organization</div>
+      <div class="tab" onclick="showTab('params')">Parameters</div>
+      <div class="tab" onclick="showTab('results')">Results</div>
+      <div class="tab" onclick="showTab('history');loadHistory()">History</div>
+    </div>
+
+    <!-- ── Org Editor Tab ── -->
+    <div class="panel active" id="tab-org">
+      <div id="org-empty" style="text-align:center;padding:60px;color:#374151">
+        <div style="font-size:36px;margin-bottom:12px">🏢</div>
+        <p>Select an organization from the sidebar to begin editing.</p>
+      </div>
+      <div id="org-editor" style="display:none">
+        <div class="org-name-bar">
+          <input type="text" id="org-name-input" placeholder="Organization name" oninput="state.orgData.name=this.value">
+          <span id="org-adv-badge" style="display:none;background:#451a03;color:#fb923c;font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px">⚠ ADVERSARIAL — AO INVERTED</span>
+        </div>
+
+        <!-- Summary cards -->
+        <div class="cards" id="org-cards"></div>
+
+        <!-- Roles table -->
+        <div class="section-hdr">
+          <h2>Role Configuration</h2>
+          <span class="hint">Click any value to edit · KPCI updates live</span>
+        </div>
+        <table class="editor-table">
+          <thead>
+            <tr>
+              <th>Role Title</th>
+              <th class="right">ST</th>
+              <th class="right">DR</th>
+              <th class="right">AO</th>
+              <th class="right">KPCI</th>
+              <th class="right">Bench</th>
+              <th class="right">Cap.Wt</th>
+              <th>Score</th>
+              <th style="text-align:center">MC</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="roles-tbody"></tbody>
+        </table>
+        <button class="add-role-btn" onclick="addRole()">+ Add Role</button>
+
+        <div style="margin-top:20px;padding:12px 16px;background:#1a1a2e;border-radius:8px;border:1px solid #2d2d4e;font-size:11px;color:#64748b">
+          <strong style="color:#94a3b8">KPCI components:</strong>
+          &nbsp;ST = Substitution Timeline (0–4) &nbsp;|&nbsp;
+          DR = Documentation Ratio (0–4) &nbsp;|&nbsp;
+          AO = Adversarial Observability (0–4) &nbsp;|&nbsp;
+          KPCI = ST + DR + AO (max 12) &nbsp;|&nbsp;
+          MC ★ = Mission-critical (triggers cascade)
+          <br><br>
+          <strong style="color:#94a3b8">Tier thresholds:</strong>
+          &nbsp;<span style="color:#f87171">■</span> Tier-1 ≥ 10 &nbsp;
+          <span style="color:#fb923c">■</span> Tier-2 ≥ 7 &nbsp;
+          <span style="color:#60a5fa">■</span> Manageable ≥ 4 &nbsp;
+          <span style="color:#4ade80">■</span> Resilient &lt; 4
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Parameters Tab ── -->
+    <div class="panel" id="tab-params">
+      <div class="section-hdr"><h2>Simulation Parameters</h2></div>
+      <div class="params-grid">
+
+        <div class="param-group">
+          <h3>Monte Carlo</h3>
+          <div class="param-row">
+            <label>Iterations (N)</label>
+            <input type="number" id="p-iterations" value="10000" min="100" max="100000" step="1000">
+            <div class="param-note">More iterations = tighter distributions. 10,000 recommended.</div>
+          </div>
+          <div class="param-row">
+            <label>Random Seed</label>
+            <input type="number" id="p-seed" value="20260501">
+            <div class="param-note">Fixed seed ensures reproducible results for citation.</div>
+          </div>
+          <div class="param-row">
+            <label>Roles lost per iteration (0 = auto 20%)</label>
+            <input type="number" id="p-n-losses" value="0" min="0">
+          </div>
+        </div>
+
+        <div class="param-group">
+          <h3>Adversarial Targeting</h3>
+          <div class="param-row">
+            <label>Targeting Accuracy
+              <span class="range-val" id="acc-val">85%</span>
+            </label>
+            <input type="range" id="p-accuracy" min="1" max="100" value="85"
+              oninput="document.getElementById('acc-val').textContent=this.value+'%'">
+            <div class="param-note">Probability adversary selects highest-KPCI target on each step.
+              85% models Thousand Talents–level systematic targeting.</div>
+          </div>
+        </div>
+
+        <div class="param-group">
+          <h3>Bench Optimizer</h3>
+          <div class="param-row">
+            <label>Budget (succession units)</label>
+            <input type="number" id="p-budget" value="3" min="0" max="20">
+            <div class="param-note">Units of bench-depth investment to allocate optimally.</div>
+          </div>
+          <div class="param-row">
+            <div class="checkbox-row">
+              <input type="checkbox" id="p-skip-optimizer">
+              <label for="p-skip-optimizer">Skip optimizer</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="param-group">
+          <h3>Scenarios</h3>
+          <div class="param-row">
+            <div class="checkbox-row">
+              <input type="checkbox" id="p-skip-cascade">
+              <label for="p-skip-cascade">Skip cascade failure analysis</label>
+            </div>
+            <div class="param-note">Cascade analysis runs one scenario per mission-critical role.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#1a2035;border:1px solid #2d3f6e;border-radius:8px;padding:16px;font-size:11px;color:#64748b">
+        <strong style="color:#93c5fd">📌 Canonical run parameters for Paper 5 citation:</strong><br>
+        Seed = 20260501 · N = 10,000 · Targeting accuracy = 85% · Budget = 3
+        <br><br>
+        Cite as: <code style="color:#fb923c">KPVS v1.1.0, seed=20260501, N=10,000</code>
+      </div>
+    </div>
+
+    <!-- ── Results Tab ── -->
+    <div class="panel" id="tab-results">
+      <div class="results-empty" id="results-empty">
+        <div class="icon">📊</div>
+        <p>Run a simulation to see results here.</p>
+      </div>
+      <div id="results-content" style="display:none">
+        <div class="result-header">
+          <h2 id="result-org-name"></h2>
+          <span class="run-id" id="result-run-id"></span>
+          <a class="open-btn" id="result-open-btn" target="_blank">↗ Open Full Report</a>
+          <button class="open-btn" onclick="copyResultJSON()">⎘ Copy JSON</button>
+        </div>
+
+        <!-- Key stats -->
+        <div class="cards" id="result-cards"></div>
+
+        <!-- Inline charts -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+          <div style="background:#1a1a2e;border:1px solid #2d2d4e;border-radius:8px;padding:16px">
+            <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">KPCI by Role</div>
+            <canvas id="res-kpci-chart" height="220"></canvas>
+          </div>
+          <div style="background:#1a1a2e;border:1px solid #2d2d4e;border-radius:8px;padding:16px">
+            <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">Capability Distribution</div>
+            <canvas id="res-dist-chart" height="220"></canvas>
+          </div>
+        </div>
+
+        <!-- Optimizer result -->
+        <div id="result-optimizer" style="display:none;margin-bottom:20px">
+          <div class="section-hdr"><h2>Bench Investment Optimizer</h2></div>
+          <div style="background:#1a1a2e;border:1px solid #2d2d4e;border-radius:8px;padding:16px">
+            <div style="display:flex;gap:24px;align-items:center;margin-bottom:14px;flex-wrap:wrap">
+              <div style="text-align:center">
+                <div style="font-size:24px;font-weight:800" id="opt-baseline"></div>
+                <div style="font-size:10px;color:#475569">Baseline (adversarial)</div>
+              </div>
+              <div style="font-size:20px;color:#374151">→</div>
+              <div style="text-align:center">
+                <div style="font-size:24px;font-weight:800;color:#4ade80" id="opt-improved"></div>
+                <div style="font-size:10px;color:#475569">After investment</div>
+              </div>
+              <div style="text-align:center;margin-left:12px">
+                <div style="font-size:24px;font-weight:800;color:#4ade80" id="opt-improvement"></div>
+                <div style="font-size:10px;color:#475569">Improvement</div>
+              </div>
+            </div>
+            <table style="width:100%;border-collapse:collapse;font-size:12px" id="opt-table">
+              <thead>
+                <tr style="background:#13131f">
+                  <th style="padding:8px 10px;text-align:left;color:#64748b;font-size:10px;text-transform:uppercase">Role</th>
+                  <th style="padding:8px 10px;color:#64748b;font-size:10px;text-transform:uppercase">KPCI</th>
+                  <th style="padding:8px 10px;color:#64748b;font-size:10px;text-transform:uppercase">Added</th>
+                  <th style="padding:8px 10px;color:#64748b;font-size:10px;text-transform:uppercase">New Restore</th>
+                </tr>
+              </thead>
+              <tbody id="opt-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div id="result-recs" style="margin-bottom:20px"></div>
+
+        <!-- Full report iframe -->
+        <div class="section-hdr" style="margin-top:8px">
+          <h2>Full Report</h2>
+          <span class="hint">Complete visualization including all charts</span>
+        </div>
+        <iframe id="report-frame" class="report-frame" src="" height="700" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <!-- ── History Tab ── -->
+    <div class="panel" id="tab-history">
+      <div class="section-hdr"><h2>Run History</h2></div>
+      <div id="history-content">
+        <div class="history-empty">Loading…</div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════
+// State
+// ══════════════════════════════════════════════════════════════════════
+const state = {
+  orgData:  null,
+  orgKey:   null,
+  lastResult: null,
+};
+
+const TIER_COLOR = {
+  'Tier-1 KPV': '#f87171',
+  'Tier-2 KPV': '#fb923c',
+  'Manageable': '#60a5fa',
+  'Resilient':  '#4ade80',
+};
+
+function kpci(r) {
+  return +(r.substitution_timeline + r.documentation_ratio +
+           r.adversarial_observability).toFixed(2);
+}
+function tier(k) {
+  if (k >= 10) return 'Tier-1 KPV';
+  if (k >=  7) return 'Tier-2 KPV';
+  if (k >=  4) return 'Manageable';
+  return 'Resilient';
+}
+function tierColor(k) { return TIER_COLOR[tier(k)]; }
+
+// ══════════════════════════════════════════════════════════════════════
+// Bootstrap
+// ══════════════════════════════════════════════════════════════════════
+async function init() {
+  const res = await fetch('/api/orgs');
+  const { orgs } = await res.json();
+
+  const byGroup = {};
+  for (const o of orgs) {
+    (byGroup[o.group] = byGroup[o.group] || []).push(o);
+  }
+
+  renderSidebar('sidebar-examples', byGroup.examples || []);
+  renderSidebar('sidebar-fvey',     byGroup.five_eyes || []);
+  renderSidebar('sidebar-adv',      byGroup.adversarial || [], true);
+}
+
+function renderSidebar(containerId, orgs, adversarial = false) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = orgs.map(o => `
+    <div class="org-item" id="sidebar-${o.key}" onclick="loadOrg('${o.key}')">
+      <div class="org-name">${escHtml(o.name.substring(0, 38))}</div>
+      <div class="org-badges">
+        ${o.t1 > 0 ? `<span class="badge t1">T1:${o.t1}</span>` : ''}
+        ${adversarial ? `<span class="badge adv">ADV</span>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// Load org
+// ══════════════════════════════════════════════════════════════════════
+async function loadOrg(key) {
+  // highlight sidebar
+  document.querySelectorAll('.org-item').forEach(e => e.classList.remove('active'));
+  document.getElementById('sidebar-' + key)?.classList.add('active');
+
+  const data = await fetch(`/api/orgs/${key}`).then(r => r.json());
+  state.orgData = data;
+  state.orgKey  = key;
+  renderOrgEditor();
+  document.getElementById('run-btn').disabled = false;
+  showTab('org');
+}
+
+function loadCustomJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      state.orgData = JSON.parse(e.target.result);
+      state.orgKey  = 'custom';
+      renderOrgEditor();
+      document.getElementById('run-btn').disabled = false;
+      showTab('org');
+      toast('Custom org loaded: ' + state.orgData.name);
+    } catch(err) {
+      toast('Invalid JSON: ' + err.message, true);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// Org editor
+// ══════════════════════════════════════════════════════════════════════
+function renderOrgEditor() {
+  const data = state.orgData;
+  if (!data) return;
+  document.getElementById('org-empty').style.display  = 'none';
+  document.getElementById('org-editor').style.display = 'block';
+  document.getElementById('org-name-input').value      = data.name || '';
+
+  const advBadge = document.getElementById('org-adv-badge');
+  advBadge.style.display = data.adversarial_org ? 'inline-block' : 'none';
+
+  renderOrgCards();
+  renderRolesTable();
+}
+
+function renderOrgCards() {
+  const data  = state.orgData;
+  const roles = normRoles(data);
+  const mc    = data.mission_critical_roles || [];
+  let t1=0,t2=0,mg=0,rs=0, zb=0;
+  for (const r of roles) {
+    const k = kpci(r);
+    const t = tier(k);
+    if (t==='Tier-1 KPV') { t1++; if ((r.bench_depth||0)===0) zb++; }
+    else if (t==='Tier-2 KPV') t2++;
+    else if (t==='Manageable') mg++;
+    else rs++;
+  }
+  document.getElementById('org-cards').innerHTML = `
+    ${card('Tier-1 KPVs', t1, 'Urgent action', t1>0 ? 'danger':'good')}
+    ${card('Tier-2 KPVs', t2, 'Elevated risk', t2>0 ? 'warn':'good')}
+    ${card('Total Roles', roles.length, 'In network', 'info')}
+    ${card('Mission-Critical', mc.length, 'Cascade triggers', 'warn')}
+    ${card('Zero-Bench T1', zb, 'Unprotected', zb>0 ? 'danger':'good')}`;
+}
+
+function card(lbl, val, sub, cls) {
+  return `<div class="card"><div class="lbl">${lbl}</div>
+    <div class="val ${cls}">${val}</div><div class="sub">${sub}</div></div>`;
+}
+
+function normRoles(data) {
+  const raw = data.roles;
+  if (Array.isArray(raw)) return raw;
+  return Object.values(raw);
+}
+
+function renderRolesTable() {
+  const data  = state.orgData;
+  const roles = normRoles(data);
+  const mc    = new Set(data.mission_critical_roles || []);
+  const tbody = document.getElementById('roles-tbody');
+  tbody.innerHTML = roles.map((r, i) => {
+    const k     = kpci(r);
+    const t     = tier(k);
+    const col   = tierColor(k);
+    const pct   = (k/12*100).toFixed(0);
+    const isMC  = mc.has(r.id);
+    return `
+<tr id="row-${i}" class="${isMC ? 'mc' : ''}">
+  <td><input class="editable name" value="${escHtml(r.title||r.id)}"
+       oninput="updateRole(${i},'title',this.value)"></td>
+  <td><input class="editable" type="number" min="0" max="4" step="0.5"
+       value="${r.substitution_timeline}" style="width:54px"
+       oninput="updateRole(${i},'substitution_timeline',+this.value);recalcRow(${i})"></td>
+  <td><input class="editable" type="number" min="0" max="4" step="0.5"
+       value="${r.documentation_ratio}" style="width:54px"
+       oninput="updateRole(${i},'documentation_ratio',+this.value);recalcRow(${i})"></td>
+  <td><input class="editable" type="number" min="0" max="4" step="0.5"
+       value="${r.adversarial_observability}" style="width:54px"
+       oninput="updateRole(${i},'adversarial_observability',+this.value);recalcRow(${i})"></td>
+  <td class="kpci-val" id="kpci-${i}" style="color:${col}">${k.toFixed(1)}</td>
+  <td><input class="editable" type="number" min="0" max="20" step="1"
+       value="${r.bench_depth||0}" style="width:54px"
+       oninput="updateRole(${i},'bench_depth',+this.value)"></td>
+  <td><input class="editable" type="number" min="0.1" step="0.5"
+       value="${r.capability_weight||1}" style="width:54px"
+       oninput="updateRole(${i},'capability_weight',+this.value)"></td>
+  <td>
+    <div class="kpci-bar-wrap">
+      <div class="kpci-bar-bg">
+        <div class="kpci-bar" id="bar-${i}"
+             style="width:${pct}%;background:${col}"></div>
+      </div>
+    </div>
+  </td>
+  <td style="text-align:center">
+    <button class="mc-toggle ${isMC ? 'on':''}" onclick="toggleMC('${r.id}',this)">★</button>
+  </td>
+  <td>
+    <button class="row-del" onclick="deleteRole(${i})" title="Remove role">✕</button>
+  </td>
+</tr>`;
+  }).join('');
+}
+
+function recalcRow(i) {
+  const r   = normRoles(state.orgData)[i];
+  const k   = kpci(r);
+  const col = tierColor(k);
+  const pct = (k/12*100).toFixed(0);
+  const kEl  = document.getElementById('kpci-'+i);
+  const bEl  = document.getElementById('bar-'+i);
+  if (kEl) { kEl.textContent = k.toFixed(1); kEl.style.color = col; }
+  if (bEl) { bEl.style.width = pct+'%'; bEl.style.background = col; }
+  renderOrgCards();
+}
+
+function updateRole(i, field, val) {
+  const roles = normRoles(state.orgData);
+  roles[i][field] = val;
+  // Sync back
+  if (Array.isArray(state.orgData.roles)) {
+    state.orgData.roles[i][field] = val;
+  } else {
+    const key = Object.keys(state.orgData.roles)[i];
+    state.orgData.roles[key][field] = val;
+  }
+}
+
+function toggleMC(roleId, btn) {
+  const mc  = state.orgData.mission_critical_roles = state.orgData.mission_critical_roles || [];
+  const idx = mc.indexOf(roleId);
+  if (idx >= 0) { mc.splice(idx, 1); btn.classList.remove('on'); }
+  else          { mc.push(roleId);   btn.classList.add('on'); }
+  renderOrgCards();
+}
+
+function deleteRole(i) {
+  const roles = normRoles(state.orgData);
+  const id    = roles[i].id;
+  roles.splice(i, 1);
+  if (Array.isArray(state.orgData.roles)) {
+    state.orgData.roles = roles;
+  } else {
+    delete state.orgData.roles[id];
+  }
+  // Remove from MC if present
+  const mc = state.orgData.mission_critical_roles || [];
+  const mi = mc.indexOf(id);
+  if (mi >= 0) mc.splice(mi, 1);
+  renderRolesTable();
+  renderOrgCards();
+}
+
+let _roleCounter = 100;
+function addRole() {
+  _roleCounter++;
+  const newRole = {
+    id: `new_role_${_roleCounter}`,
+    title: 'New Role',
+    substitution_timeline: 2.0,
+    documentation_ratio: 2.0,
+    adversarial_observability: 2.0,
+    capability_weight: 1.0,
+    bench_depth: 0,
+    reports_to: null,
+    critical_dependencies: [],
+  };
+  if (Array.isArray(state.orgData.roles)) {
+    state.orgData.roles.push(newRole);
+  } else {
+    state.orgData.roles[newRole.id] = newRole;
+  }
+  renderRolesTable();
+  renderOrgCards();
+  // Scroll to bottom of table
+  document.getElementById('roles-tbody').lastElementChild?.scrollIntoView({behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// Run simulation
+// ══════════════════════════════════════════════════════════════════════
+let _kpciChart = null, _distChart = null;
+
+async function executeRun() {
+  if (!state.orgData) { toast('Select an organization first.', true); return; }
+
+  const btn = document.getElementById('run-btn');
+  const status = document.getElementById('run-status');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Running…';
+  status.textContent = 'Simulating…';
+
+  const params = {
+    iterations: +document.getElementById('p-iterations').value,
+    seed:       +document.getElementById('p-seed').value,
+    n_losses:   +document.getElementById('p-n-losses').value || null,
+    budget:     +document.getElementById('p-budget').value,
+    targeting_accuracy: document.getElementById('p-accuracy').value / 100,
+    skip_cascade:  document.getElementById('p-skip-cascade').checked,
+    skip_optimizer: document.getElementById('p-skip-optimizer').checked,
+  };
+
+  try {
+    const res = await fetch('/api/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        org_data: state.orgData,
+        params,
+        org_key: state.orgKey || 'custom',
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.detail || 'Simulation failed');
+    }
+
+    const result = await res.json();
+    state.lastResult = result;
+    renderResults(result);
+    showTab('results');
+    toast('✓ Run complete — adversarial gap: ' + result.adversarial_gap_pp.toFixed(1) + ' pp');
+  } catch (err) {
+    toast('Error: ' + err.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '▶ Run Simulation';
+    status.textContent = '';
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// Render results
+// ══════════════════════════════════════════════════════════════════════
+function renderResults(result) {
+  const s   = result.summary;
+  const org = s.organisation;
+  const rnd = s.scenarios.find(x => x.scenario.includes('Random'));
+  const adv = s.scenarios.find(x => x.scenario.includes('Adversarial'));
+  const gap = result.adversarial_gap_pp;
+
+  document.getElementById('results-empty').style.display   = 'none';
+  document.getElementById('results-content').style.display = 'block';
+  document.getElementById('result-org-name').textContent   = org.name;
+  document.getElementById('result-run-id').textContent     = result.run_id;
+  document.getElementById('result-open-btn').href          = result.report_url;
+
+  // Summary cards
+  const ts  = org.tier_summary || {};
+  const recs = s.kpci_report || [];
+  const zb   = recs.filter(r => r.tier === 'Tier-1 KPV' && r.bench_depth === 0).length;
+  document.getElementById('result-cards').innerHTML = `
+    ${card('Adv. Gap', gap.toFixed(1)+' pp', 'vs random attrition', gap>10?'danger':gap>5?'warn':'info')}
+    ${card('Random Mean', rnd.mean_pct.toFixed(1)+'%', 'Capability retention', 'info')}
+    ${card('Adversarial Mean', adv.mean_pct.toFixed(1)+'%', 'Under targeted attack', adv.mean_pct<75?'danger':'warn')}
+    ${card('Tier-1 KPVs', ts['Tier-1 KPV']||0, 'Immediate action', (ts['Tier-1 KPV']||0)>0?'danger':'good')}
+    ${card('Zero-Bench T1', zb, 'Unprotected', zb>0?'danger':'good')}`;
+
+  // KPCI chart
+  const roles     = recs.slice(0,14);
+  const rLabels   = roles.map(r => r.title.substring(0,22));
+  const rKpci     = roles.map(r => r.kpci);
+  const rColors   = roles.map(r => TIER_COLOR[r.tier] || '#64748b');
+  if (_kpciChart) _kpciChart.destroy();
+  _kpciChart = new Chart(document.getElementById('res-kpci-chart'), {
+    type: 'bar',
+    data: { labels: rLabels,
+            datasets: [{ label:'KPCI', data: rKpci,
+                         backgroundColor: rColors, borderRadius:3 }] },
+    options: { indexAxis:'y', responsive:true,
+      plugins:{ legend:{display:false} },
+      scales:{ x:{min:0,max:12,
+                   grid:{color:'#1e1e30'},
+                   ticks:{color:'#475569',font:{size:9}}},
+               y:{ticks:{color:'#94a3b8',font:{size:9}}} } }
+  });
+
+  // Distribution chart
+  const ps = [10,25,50,75,90];
+  const rndP = ps.map(p => rnd[`p${p}_pct`] || 0);
+  const advP = ps.map(p => adv[`p${p}_pct`] || 0);
+  if (_distChart) _distChart.destroy();
+  _distChart = new Chart(document.getElementById('res-dist-chart'), {
+    type: 'bar',
+    data: {
+      labels: ['P10','P25','P50','P75','P90'],
+      datasets: [
+        { label:'Random', data: rndP, backgroundColor:'#3b82f660', borderColor:'#3b82f6', borderWidth:1, borderRadius:3 },
+        { label:'Adversarial', data: advP, backgroundColor:'#f8717160', borderColor:'#f87171', borderWidth:1, borderRadius:3 },
+      ]
+    },
+    options: { responsive:true,
+      scales:{ y:{min:0,max:100, grid:{color:'#1e1e30'},
+                   ticks:{color:'#475569',font:{size:9}}},
+               x:{ticks:{color:'#94a3b8',font:{size:9}}} },
+      plugins:{ legend:{labels:{color:'#94a3b8',font:{size:10}}} } }
+  });
+
+  // Optimizer
+  const opt = s.optimizer;
+  if (opt && !document.getElementById('p-skip-optimizer').checked) {
+    document.getElementById('result-optimizer').style.display = 'block';
+    document.getElementById('opt-baseline').textContent    = opt.baseline_mean_pct.toFixed(1)+'%';
+    document.getElementById('opt-improved').textContent    = opt.optimized_mean_pct.toFixed(1)+'%';
+    document.getElementById('opt-improvement').textContent = '+'+opt.improvement_pp.toFixed(1)+' pp';
+    const tbody = document.getElementById('opt-tbody');
+    tbody.innerHTML = Object.entries(opt.allocation||{}).map(([,d])=>`
+      <tr style="border-bottom:1px solid #1e1e30">
+        <td style="padding:8px 10px;color:#e2e8f0">${escHtml(d.title)}</td>
+        <td style="padding:8px 10px;color:${TIER_COLOR[d.tier]||'#64748b'};font-weight:700">${d.kpci.toFixed(1)}</td>
+        <td style="padding:8px 10px;color:#4ade80;font-weight:700">+${d.units_added}</td>
+        <td style="padding:8px 10px;color:#94a3b8">${(d.new_restoration_months||0).toFixed(0)} mo</td>
+      </tr>`).join('');
+  } else {
+    document.getElementById('result-optimizer').style.display = 'none';
+  }
+
+  // Recommendations
+  const urgent = recs.filter(r => ['Tier-1 KPV','Tier-2 KPV'].includes(r.tier));
+  document.getElementById('result-recs').innerHTML = urgent.length ? `
+    <div class="section-hdr"><h2>Priority Recommendations</h2></div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+    ${urgent.map(r => `
+    <div style="background:#1a1a2e;border-radius:8px;padding:14px 16px;
+                border-left:3px solid ${TIER_COLOR[r.tier]}">
+      <div style="font-weight:700;font-size:13px;color:#e2e8f0;margin-bottom:4px">
+        <span style="font-size:10px;font-weight:700;background:${TIER_COLOR[r.tier]}20;
+               color:${TIER_COLOR[r.tier]};padding:2px 6px;border-radius:3px;margin-right:6px">
+          ${r.tier==='Tier-1 KPV'?'T1':'T2'}
+        </span>
+        ${escHtml(r.title)}
+        ${r.mission_critical ? '<span style="color:#f97316;margin-left:6px;font-size:11px">★ MC</span>':''}
+      </div>
+      <div style="font-size:11px;color:#475569;margin-bottom:6px">
+        KPCI ${r.kpci.toFixed(1)} | Bench: ${r.bench_depth} | Restore: ${r.estimated_restoration_months}mo
+      </div>
+      <div style="font-size:12px;color:#94a3b8">${escHtml(r.recommendation)}</div>
+    </div>`).join('')}
+    </div>` : '';
+
+  // Load report in iframe
+  document.getElementById('report-frame').src = result.report_url;
+}
+
+function copyResultJSON() {
+  if (!state.lastResult) return;
+  navigator.clipboard.writeText(JSON.stringify(state.lastResult.summary, null, 2));
+  toast('Summary JSON copied to clipboard');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// History
+// ══════════════════════════════════════════════════════════════════════
+async function loadHistory() {
+  const el  = document.getElementById('history-content');
+  el.innerHTML = '<div class="history-empty">Loading…</div>';
+  const { runs } = await fetch('/api/runs').then(r => r.json());
+  if (!runs.length) {
+    el.innerHTML = '<div class="history-empty">No runs yet. Execute a simulation to see history here.</div>';
+    return;
+  }
+  el.innerHTML = `<div class="history-list">${runs.map(r => `
+    <div class="history-item">
+      <div>
+        <div class="hi-name">${escHtml(r.org_name || r.run_folder)}</div>
+        <div class="hi-meta">${r.timestamp || r.run_folder}
+          ${r.t1 !== undefined ? ` · T1: <span class="hi-t1">${r.t1}</span>` : ''}</div>
+      </div>
+      ${r.gap_pp !== null && r.gap_pp !== undefined ?
+        `<div class="hi-gap">${(+r.gap_pp).toFixed(1)} pp</div>` : ''}
+      <a href="${r.report_url}" target="_blank" class="open-btn" style="text-decoration:none">
+        ↗ Report
+      </a>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// UI helpers
+// ══════════════════════════════════════════════════════════════════════
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const names=['org','params','results','history'];
+    t.classList.toggle('active', names[i]===name);
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+let _toastTimer;
+function toast(msg, error=false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show' + (error ? ' error' : '');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.className = '', 3000);
+}
+
+function escHtml(s) {
+  return String(s||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Start ──────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>

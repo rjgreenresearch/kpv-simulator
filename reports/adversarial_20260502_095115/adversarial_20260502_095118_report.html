@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KPVS Comparative KPV Assessment — adversarial</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
+  crossorigin="anonymous"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  background: #f8fafc;
+  color: #1e293b;
+  line-height: 1.5;
+}
+.page { max-width: 1200px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* Header */
+.report-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+  color: white; padding: 28px 32px; border-radius: 12px; margin-bottom: 24px;
+}
+.report-header h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+.report-header .subtitle { color: #94a3b8; font-size: 12px; }
+.report-header .meta { display: flex; gap: 20px; margin-top: 14px; flex-wrap: wrap; }
+.report-header .meta-item { font-size: 11px; color: #cbd5e1; }
+.report-header .meta-item strong { color: white; }
+
+/* Adversarial banner */
+.adv-banner {
+  background: #7c2d12; color: #fed7aa; padding: 12px 20px;
+  border-radius: 8px; margin-bottom: 20px; font-size: 12px;
+  border-left: 4px solid #f97316;
+}
+.adv-banner strong { color: #ffedd5; }
+
+/* Cards */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.card {
+  background: white; border-radius: 10px; padding: 18px 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08); border: 1px solid #e2e8f0;
+}
+.card .label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+.card .value { font-size: 26px; font-weight: 700; line-height: 1; }
+.card .sub { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+.card.danger .value { color: #dc2626; }
+.card.warn   .value { color: #d97706; }
+.card.good   .value { color: #16a34a; }
+.card.info   .value { color: #2563eb; }
+
+/* Section headers */
+.section { margin-bottom: 28px; }
+.section h2 {
+  font-size: 14px; font-weight: 700; color: #1a1a2e;
+  padding-bottom: 8px; border-bottom: 2px solid #1a1a2e;
+  margin-bottom: 16px; text-transform: uppercase; letter-spacing: .06em;
+}
+
+/* KPCI Table */
+.kpci-table { width: 100%; border-collapse: collapse; background: white;
+  border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  font-size: 12px; }
+.kpci-table th {
+  background: #1a1a2e; color: #94a3b8; font-weight: 600; font-size: 10px;
+  text-transform: uppercase; letter-spacing: .06em; padding: 10px 12px; text-align: left;
+}
+.kpci-table th.right { text-align: right; }
+.kpci-table td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+.kpci-table tr:last-child td { border-bottom: none; }
+.kpci-table tr:hover td { background: #f8fafc; }
+
+/* Tier badge */
+.badge {
+  display: inline-block; padding: 2px 7px; border-radius: 4px;
+  font-size: 10px; font-weight: 700; letter-spacing: .04em;
+}
+.mc-star { color: #d97706; font-weight: 700; margin-left: 4px; }
+.kpci-bar-cell { width: 120px; }
+.kpci-bar-bg { background: #f1f5f9; border-radius: 3px; height: 8px; overflow: hidden; }
+.kpci-bar { height: 8px; border-radius: 3px; }
+
+/* Chart containers */
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.chart-box {
+  background: white; border-radius: 10px; padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08); border: 1px solid #e2e8f0;
+}
+.chart-box h3 { font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 14px;
+  text-transform: uppercase; letter-spacing: .05em; }
+.chart-full { grid-column: 1 / -1; }
+canvas { max-width: 100%; }
+
+/* Cascade cards */
+.cascade-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.cascade-card {
+  background: white; border-radius: 10px; padding: 18px;
+  border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+.cascade-card .trigger { font-weight: 700; font-size: 13px; margin-bottom: 10px; }
+.cascade-card .stat-row { display: flex; justify-content: space-between;
+  padding: 5px 0; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
+.cascade-card .stat-row:last-child { border-bottom: none; }
+.cascade-card .stat-val { font-weight: 600; }
+.stat-danger { color: #dc2626; }
+.stat-warn   { color: #d97706; }
+.stat-good   { color: #16a34a; }
+
+/* Optimizer */
+.optimizer-box {
+  background: white; border-radius: 10px; padding: 20px;
+  border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+.opt-header { display: flex; gap: 24px; margin-bottom: 18px; flex-wrap: wrap; }
+.opt-stat { text-align: center; }
+.opt-stat .val { font-size: 28px; font-weight: 700; }
+.opt-stat .lbl { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: .05em; }
+.opt-arrow { font-size: 24px; color: #94a3b8; align-self: center; }
+.opt-improvement { font-size: 28px; font-weight: 700; color: #16a34a; }
+.alloc-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.alloc-table th { text-align: left; padding: 8px 10px; background: #f8fafc;
+  font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: #64748b; }
+.alloc-table td { padding: 8px 10px; border-bottom: 1px solid #f1f5f9; }
+.alloc-table tr:last-child td { border-bottom: none; }
+
+/* Recommendations */
+.rec-list { display: flex; flex-direction: column; gap: 12px; }
+.rec-item {
+  background: white; border-radius: 10px; padding: 16px 18px;
+  border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  border-left: 4px solid #e2e8f0;
+}
+.rec-item.t1 { border-left-color: #dc2626; }
+.rec-item.t2 { border-left-color: #d97706; }
+.rec-title { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+.rec-meta { font-size: 11px; color: #64748b; margin-bottom: 8px; }
+.rec-text { font-size: 12px; color: #334155; }
+
+/* Comparative table */
+.comp-table { width: 100%; border-collapse: collapse; background: white;
+  border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.comp-table th { background: #1a1a2e; color: #94a3b8; padding: 10px 14px;
+  font-size: 10px; text-transform: uppercase; letter-spacing: .06em; text-align: left; }
+.comp-table td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
+.comp-table tr.adv-row td { background: #fff7ed; }
+.gap-bar-wrap { display: flex; align-items: center; gap: 8px; }
+.gap-bar-bg { flex: 1; background: #f1f5f9; border-radius: 3px; height: 8px; overflow: hidden; }
+.gap-bar { height: 8px; border-radius: 3px; background: #2563eb; }
+.gap-bar.warn { background: #d97706; }
+.gap-bar.danger { background: #dc2626; }
+.gap-num { font-size: 11px; font-weight: 600; width: 40px; text-align: right; }
+.int-gap-note { font-size: 10px; color: #dc2626; font-style: italic; }
+
+/* Footer */
+.report-footer {
+  text-align: center; font-size: 11px; color: #94a3b8; margin-top: 40px;
+  padding-top: 20px; border-top: 1px solid #e2e8f0;
+}
+
+@media (max-width: 700px) {
+  .chart-grid { grid-template-columns: 1fr; }
+  .cards { grid-template-columns: repeat(2, 1fr); }
+}
+@media print {
+  .page { max-width: 100%; padding: 16px; }
+  .chart-box, .card, .kpci-table, .cascade-card { box-shadow: none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="report-header">
+  <h1>Comparative KPV Assessment — adversarial</h1>
+  <div class="subtitle">Key Person Vulnerability Simulator v1.0.0
+    — Multi-Organization Comparative Report</div>
+  <div class="meta">
+    <div class="meta-item"><strong>Organizations</strong><br>4</div>
+    <div class="meta-item"><strong>Generated</strong><br>2026-05-02 09:51</div>
+    <div class="meta-item"><strong>Adversarial AO Note</strong><br>
+      [ADV] rows: low gap = intelligence gap, not resilience</div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Comparative Summary</h2>
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Organization</th>
+        <th style="text-align:center">Roles</th>
+        <th style="text-align:center">T1</th>
+        <th style="text-align:center">T2</th>
+        <th style="text-align:center">MC</th>
+        <th style="text-align:center">Zero-Bench T1</th>
+        <th style="text-align:right">Rnd Mean%</th>
+        <th style="text-align:right">Adv Mean%</th>
+        <th>Adversarial Gap</th>
+      </tr>
+    </thead>
+    <tbody>
+<tr class="adv-row">
+  <td><strong>People's Republic of China — Strategic Leadership KPV A</strong>
+      &nbsp;<em style='color:#d97706;font-size:10px'>[ADV]</em>
+  </td>
+  <td style="text-align:center">14</td>
+  <td style="text-align:center;color:#dc2626;font-weight:700">7</td>
+  <td style="text-align:center;color:#d97706;font-weight:700">7</td>
+  <td style="text-align:center">8</td>
+  <td style="text-align:center;color:#dc2626;font-weight:700">6</td>
+  <td style="text-align:right">86.1%</td>
+  <td style="text-align:right">84.3%</td>
+  <td>
+<div class="gap-bar-wrap">
+  <div class="gap-bar-bg">
+    <div class="gap-bar " style="width:7%"></div>
+  </div>
+  <span class="gap-num">+1.8</span>
+</div><br><span class="int-gap-note">⚠ Near-zero gap = intelligence gap</span></td>
+</tr>
+<tr class="adv-row">
+  <td><strong>Russian Federation — Strategic Leadership KPV Assessmen</strong>
+      &nbsp;<em style='color:#d97706;font-size:10px'>[ADV]</em>
+  </td>
+  <td style="text-align:center">11</td>
+  <td style="text-align:center;color:#dc2626;font-weight:700">7</td>
+  <td style="text-align:center;color:#d97706;font-weight:700">4</td>
+  <td style="text-align:center">6</td>
+  <td style="text-align:center;color:#dc2626;font-weight:700">7</td>
+  <td style="text-align:right">78.4%</td>
+  <td style="text-align:right">79.3%</td>
+  <td>
+<div class="gap-bar-wrap">
+  <div class="gap-bar-bg">
+    <div class="gap-bar " style="width:4%"></div>
+  </div>
+  <span class="gap-num">-0.9</span>
+</div><br><span class="int-gap-note">⚠ Near-zero gap = intelligence gap</span></td>
+</tr>
+<tr class="adv-row">
+  <td><strong>Islamic Republic of Iran — Strategic Leadership KPV Ass</strong>
+      &nbsp;<em style='color:#d97706;font-size:10px'>[ADV]</em>
+  </td>
+  <td style="text-align:center">9</td>
+  <td style="text-align:center;color:#dc2626;font-weight:700">7</td>
+  <td style="text-align:center;color:#d97706;font-weight:700">2</td>
+  <td style="text-align:center">5</td>
+  <td style="text-align:center;color:#dc2626;font-weight:700">7</td>
+  <td style="text-align:right">86.1%</td>
+  <td style="text-align:right">85.8%</td>
+  <td>
+<div class="gap-bar-wrap">
+  <div class="gap-bar-bg">
+    <div class="gap-bar " style="width:1%"></div>
+  </div>
+  <span class="gap-num">+0.3</span>
+</div><br><span class="int-gap-note">⚠ Near-zero gap = intelligence gap</span></td>
+</tr>
+<tr class="adv-row">
+  <td><strong>Democratic People's Republic of Korea — Strategic Leade</strong>
+      &nbsp;<em style='color:#d97706;font-size:10px'>[ADV]</em>
+  </td>
+  <td style="text-align:center">8</td>
+  <td style="text-align:center;color:#dc2626;font-weight:700">3</td>
+  <td style="text-align:center;color:#d97706;font-weight:700">5</td>
+  <td style="text-align:center">4</td>
+  <td style="text-align:center;color:#dc2626;font-weight:700">3</td>
+  <td style="text-align:right">84.6%</td>
+  <td style="text-align:right">84.8%</td>
+  <td>
+<div class="gap-bar-wrap">
+  <div class="gap-bar-bg">
+    <div class="gap-bar " style="width:1%"></div>
+  </div>
+  <span class="gap-num">-0.2</span>
+</div><br><span class="int-gap-note">⚠ Near-zero gap = intelligence gap</span></td>
+</tr></tbody>
+  </table>
+</div>
+
+<div class="chart-grid">
+  <div class="chart-box">
+    <h3>Adversarial Targeting Gap by Organization</h3>
+    <canvas id="gapChart" height="300"></canvas>
+  </div>
+  <div class="chart-box">
+    <h3>Random vs Adversarial Mean Capability</h3>
+    <canvas id="capChart" height="300"></canvas>
+  </div>
+</div>
+
+<div class="report-footer">
+  KPVS v1.0.0 &nbsp;·&nbsp; MTS Research Programme Working Paper 5 &nbsp;·&nbsp;
+  Robert J. Green &nbsp;·&nbsp; rjgreenresearch.org<br>
+  <em>[ADV] organizations: AO scores reflect allied OSINT visibility.
+  Near-zero adversarial gap indicates intelligence gap, not resilience.
+  Classified AO data would significantly alter adversarial org results.</em>
+</div>
+</div>
+
+<script>
+new Chart(document.getElementById('gapChart'), {
+  type: 'bar',
+  data: {
+    labels: ["People's Republic of China \u2014 Strate", "Russian Federation \u2014 Strategic Lead", "Islamic Republic of Iran \u2014 Strategi", "Democratic People's Republic of Kor"],
+    datasets: [{
+      label: 'Adversarial Gap (pp)',
+      data: [1.8, 0.9, 0.3, 0.2],
+      backgroundColor: ["#dc2626", "#dc2626", "#dc2626", "#dc2626"],
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { min: 0, title: { display: true,
+             text: 'Adversarial Gap (percentage points)',
+             font: { size: 10 } },
+             grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+      y: { ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+new Chart(document.getElementById('capChart'), {
+  type: 'bar',
+  data: {
+    labels: ["People's Republic of China \u2014 Strate", "Russian Federation \u2014 Strategic Lead", "Islamic Republic of Iran \u2014 Strategi", "Democratic People's Republic of Kor"],
+    datasets: [
+      { label: 'Random Attrition', data: [86.08, 78.43, 86.08, 84.62],
+         backgroundColor: '#3b82f680', borderRadius: 4 },
+      { label: 'Adversarial Targeting', data: [84.27, 79.29, 85.76, 84.81],
+         backgroundColor: '#dc262680', borderRadius: 4 },
+    ]
+  },
+  options: {
+    scales: {
+      y: { min: 0, max: 100,
+             title: { display: true, text: 'Capability %', font: { size: 10 } },
+             grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+      x: { ticks: { font: { size: 10 } } }
+    },
+    plugins: { legend: { labels: { font: { size: 11 } } } }
+  }
+});
+</script>
+</body>
+</html>

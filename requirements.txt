@@ -1,4 +1,7 @@
-# KPVS runtime — pure standard library, no external dependencies required.
-# Optional development / QA dependencies:
-pytest>=7.4
-pytest-cov>=4.1
+
+# Web interface dependencies
+fastapi>=0.100
+uvicorn>=0.23
+jinja2>=3.1
+python-multipart>=0.0.6
+httpx>=0.24          # for FastAPI TestClient

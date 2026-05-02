@@ -1,0 +1,78 @@
+{
+  "name": "New Zealand National Security Architecture \u2014 Senior Leadership KPV Assessment",
+  "description": "KPV assessment of NZ national security senior leadership. Sources: DPMC public org, GCSB/NZSIS annual reports, parliamentary select committee reports.",
+  "adversarial_org": false,
+  "mission_critical_roles": [
+    "nz_nsa",
+    "gcsb_dir",
+    "nzsis_dir"
+  ],
+  "roles": [
+    {
+      "id": "nz_nsa",
+      "title": "Director-General, Department of Prime Minister and Cabinet (DPMC) Security",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 3.5,
+      "reports_to": null,
+      "critical_dependencies": [
+        "gcsb_dir",
+        "nzsis_dir",
+        "nctr"
+      ],
+      "capability_weight": 4.5,
+      "bench_depth": 0,
+      "notes": "NZ IC coordination; Five Eyes participation. Source: DPMC public org; Intelligence and Security Act 2017."
+    },
+    {
+      "id": "gcsb_dir",
+      "title": "Director-General, GCSB",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 3.5,
+      "reports_to": "nz_nsa",
+      "critical_dependencies": [
+        "ncsc_nz"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 1,
+      "notes": "SIGINT and national cyber security. Five Eyes smallest partner; Waihopai station. Source: GCSB public charter; Intelligence and Security Act 2017."
+    },
+    {
+      "id": "nzsis_dir",
+      "title": "Director-General, NZSIS",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 3.5,
+      "reports_to": "nz_nsa",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 1,
+      "notes": "Domestic security and HUMINT. Source: NZSIS Annual Report; Intelligence and Security Act 2017."
+    },
+    {
+      "id": "nctr",
+      "title": "National Centre for Research on Europe / Strategic Assessment",
+      "substitution_timeline": 2.5,
+      "documentation_ratio": 2.0,
+      "adversarial_observability": 2.5,
+      "reports_to": "nz_nsa",
+      "critical_dependencies": [],
+      "capability_weight": 2.0,
+      "bench_depth": 1,
+      "notes": "Strategic assessment function. Source: DPMC public org."
+    },
+    {
+      "id": "ncsc_nz",
+      "title": "Director, NCSC New Zealand",
+      "substitution_timeline": 2.5,
+      "documentation_ratio": 2.0,
+      "adversarial_observability": 3.0,
+      "reports_to": "gcsb_dir",
+      "critical_dependencies": [],
+      "capability_weight": 2.5,
+      "bench_depth": 1,
+      "notes": "National Cyber Security Centre. Source: GCSB/NCSC public org."
+    }
+  ]
+}

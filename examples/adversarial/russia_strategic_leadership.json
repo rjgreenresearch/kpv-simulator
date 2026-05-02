@@ -1,0 +1,164 @@
+{
+  "name": "Russian Federation \u2014 Strategic Leadership KPV Assessment (Open Source)",
+  "description": "Open-source KPV assessment of Russian strategic leadership. AO INVERTED: high AO = visible to allied OSINT. All data from public sources: Moscow Times, Meduza, Bellingcat, RUSI, IISS, CRS, think tank analyses. No classified sources.",
+  "adversarial_org": true,
+  "ao_note": "INVERTED AO: High AO = clearly visible to allied OSINT. Low AO = opaque \u2014 indicates intelligence gap.",
+  "mission_critical_roles": [
+    "putin",
+    "patrushev_sec",
+    "svr_dir",
+    "fsb_dir",
+    "rosatom_ceo",
+    "mil_ind_complex_dir"
+  ],
+  "roles": [
+    {
+      "id": "putin",
+      "title": "Vladimir Putin \u2014 President / Supreme Commander",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 4.0,
+      "reports_to": null,
+      "critical_dependencies": [
+        "patrushev_sec",
+        "svr_dir",
+        "fsb_dir",
+        "mil_ind_complex_dir"
+      ],
+      "capability_weight": 5.0,
+      "bench_depth": 0,
+      "notes": "Hypercentralised authority; succession architecture fragmented (Mishustin, Patrushev, Medvedev each hold partial successor claim). KPCI=12 in compound KPV terms. Source: Kremlin public statements; PONARS Eurasia; CRS R46273."
+    },
+    {
+      "id": "patrushev_sec",
+      "title": "Nikolai Patrushev \u2014 Presidential Aide / Former NSC Secretary",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "putin",
+      "critical_dependencies": [
+        "svr_dir",
+        "fsb_dir"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "FSB/SVR relationship capital; national security architecture tacit knowledge. Longest-serving member of Putin inner circle. Source: Kremlin public appointments; Meduza; RUSI analysis."
+    },
+    {
+      "id": "svr_dir",
+      "title": "Director, Foreign Intelligence Service (SVR)",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 3.5,
+      "reports_to": "patrushev_sec",
+      "critical_dependencies": [],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "HUMINT and illegals programme. Naryshkin publicly identified; operational network tacit. Source: SVR public announcements; Bellingcat Salisbury/Skripal analysis; CRS."
+    },
+    {
+      "id": "fsb_dir",
+      "title": "Director, FSB",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "patrushev_sec",
+      "critical_dependencies": [
+        "fsb_18th_center"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "Domestic CI and offensive cyber (18th Centre). Bortnikov publicly identified. Source: FSB public announcements; Microsoft MSTIC; CISA advisories (Sandworm attribution)."
+    },
+    {
+      "id": "fsb_18th_center",
+      "title": "FSB 18th Centre Director (Sandworm / GRU Cyber)",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 1.5,
+      "reports_to": "fsb_dir",
+      "critical_dependencies": [],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "INTELLIGENCE GAP: AO=1.5. Offensive cyber operational directors are opaque. Sandworm attributed to GRU Unit 74455 at entity level only. Source: CISA AA22-110A (public); DOJ indictments; Microsoft MSTIC."
+    },
+    {
+      "id": "rosatom_ceo",
+      "title": "Director General, Rosatom",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "putin",
+      "critical_dependencies": [
+        "rosatom_weapons"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "Likhachev publicly identified. Dual civil/weapons nuclear programme. International nuclear partnership relationships (Belt and Road nuclear). Source: Rosatom public org; WNA; CRS RL34248."
+    },
+    {
+      "id": "rosatom_weapons",
+      "title": "Rosatom \u2014 Nuclear Weapons Complex Director",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 2.0,
+      "reports_to": "rosatom_ceo",
+      "critical_dependencies": [],
+      "capability_weight": 4.5,
+      "bench_depth": 0,
+      "notes": "INTELLIGENCE GAP: AO=2.0. VNIIEF (Sarov) and VNIITF weapons complex directors are publicly associated with institutes but individual design authority is opaque. Source: NTI Russia profile; SIPRI; public Russian defence literature."
+    },
+    {
+      "id": "mil_ind_complex_dir",
+      "title": "Deputy PM for Military-Industrial Complex (Borisov/Belousov)",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "putin",
+      "critical_dependencies": [
+        "rostec_ceo"
+      ],
+      "capability_weight": 3.5,
+      "bench_depth": 1,
+      "notes": "Military-industrial coordination. Publicly identified role. Source: Russian Government public org; RUSI Defence Procurement analysis."
+    },
+    {
+      "id": "rostec_ceo",
+      "title": "CEO, Rostec (Sergei Chemezov)",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "mil_ind_complex_dir",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "Rostec: Russia's defence industrial conglomerate. Chemezov is sanctioned and publicly identified. S-400, Kalashnikov, aircraft engine production. Source: Rostec public org; OFAC SDN list (public); IISS."
+    },
+    {
+      "id": "gru_dir",
+      "title": "Director, GRU (Military Intelligence)",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 3.0,
+      "reports_to": "cjcs_ru",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "GRU Director publicly known. Unit-level attribution (APT28/Fancy Bear = Unit 26165) established via DOJ indictments. Source: DOJ indictments (public); Bellingcat."
+    },
+    {
+      "id": "cjcs_ru",
+      "title": "Chief of General Staff (Gerasimov)",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "putin",
+      "critical_dependencies": [
+        "gru_dir"
+      ],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "Gerasimov publicly identified. 'Gerasimov doctrine' (hybrid warfare) substantially tacit as implemented. Source: Russian MOD public org; RUSI; Brookings."
+    }
+  ]
+}

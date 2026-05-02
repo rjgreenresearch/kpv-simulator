@@ -1,0 +1,332 @@
+{
+  "name": "U.S. National Security Architecture \u2014 Senior Leadership KPV Assessment",
+  "description": "KPV assessment of the U.S. national security senior leadership architecture. All roles are public-record positions. AO scores reflect observability to foreign adversarial intelligence. Sources: NSC charter, public biographies, CRS reports, open government directories.",
+  "adversarial_org": false,
+  "mission_critical_roles": [
+    "nsa_advisor",
+    "dni",
+    "cia_director",
+    "secdef",
+    "cjcs",
+    "nsc_cyber_coord",
+    "nuclear_cdr"
+  ],
+  "roles": [
+    {
+      "id": "nsa_advisor",
+      "title": "National Security Advisor",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 4.0,
+      "reports_to": null,
+      "critical_dependencies": [
+        "dni",
+        "secdef",
+        "sec_state",
+        "cjcs",
+        "nsc_cyber_coord"
+      ],
+      "capability_weight": 5.0,
+      "bench_depth": 0,
+      "notes": "Highest relationship-capital KPV in U.S. government. Presidential access, allied NSA relationships, IC coordination role. Tacit knowledge of inter-agency equities irreplaceable. Source: CRS R45607, public NSC charter."
+    },
+    {
+      "id": "dni",
+      "title": "Director of National Intelligence",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "nsa_advisor",
+      "critical_dependencies": [
+        "cia_director",
+        "nsa_dir",
+        "dia_dir",
+        "fbi_ci"
+      ],
+      "capability_weight": 4.5,
+      "bench_depth": 1,
+      "notes": "IC integration role. Relationship capital with Five Eyes partners' intelligence chiefs is non-transferable. Statutory authority under IRTPA. Source: IRTPA 2004; ODNI public org chart."
+    },
+    {
+      "id": "cia_director",
+      "title": "Director, Central Intelligence Agency",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "dni",
+      "critical_dependencies": [
+        "ncs_director",
+        "s_t_director",
+        "cia_analysis"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 1,
+      "notes": "HUMINT network relationships and covert programme oversight. Cover and source relationships are substantially tacit. Source: CIA public org chart; CRS IC oversight reports."
+    },
+    {
+      "id": "secdef",
+      "title": "Secretary of Defense",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "nsa_advisor",
+      "critical_dependencies": [
+        "cjcs",
+        "usd_rd",
+        "dpa_title3",
+        "nuclear_cdr"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 1,
+      "notes": "NATO ministerial relationships; congressional defense committee relationships. Higher documentation ratio than civilian IC roles due to statutory/regulatory framework. Source: DoD org; 10 U.S.C."
+    },
+    {
+      "id": "cjcs",
+      "title": "Chairman, Joint Chiefs of Staff",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "secdef",
+      "critical_dependencies": [
+        "nuclear_cdr",
+        "cybercom_cdr",
+        "stratcom_cdr"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 1,
+      "notes": "Senior military advisor; allied CHOD relationships built over career. Succession path exists (VCJCS) but relationship capital not transferable. Source: 10 U.S.C. \u00a7 151; public DoD directory."
+    },
+    {
+      "id": "nsa_dir",
+      "title": "Director, National Security Agency / CYBERCOM",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 3.5,
+      "reports_to": "dni",
+      "critical_dependencies": [
+        "cybercom_cdr"
+      ],
+      "capability_weight": 3.5,
+      "bench_depth": 1,
+      "notes": "Dual-hatted; SIGINT and CYBERCOM integration. Five Eyes SIGINT partnership relationships substantially tacit. Source: NSA/CSS public charter; CRS R43955."
+    },
+    {
+      "id": "dia_dir",
+      "title": "Director, Defense Intelligence Agency",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 3.5,
+      "reports_to": "dni",
+      "critical_dependencies": [],
+      "capability_weight": 3.0,
+      "bench_depth": 1,
+      "notes": "Defense HUMINT and all-source analysis. Allied defence intelligence relationships. Source: DIA public org; CRS R44681."
+    },
+    {
+      "id": "fbi_ci",
+      "title": "FBI Executive Assistant Director, National Security",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.0,
+      "adversarial_observability": 3.0,
+      "reports_to": "dni",
+      "critical_dependencies": [
+        "ci_division",
+        "wmd_directorate"
+      ],
+      "capability_weight": 3.0,
+      "bench_depth": 1,
+      "notes": "Counterintelligence programme oversight. Source protection and CI relationship capital. Source: FBI public org; HPSCI reports."
+    },
+    {
+      "id": "nsc_cyber_coord",
+      "title": "NSC Coordinator for Intelligence and Defense",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 2.5,
+      "reports_to": "nsa_advisor",
+      "critical_dependencies": [
+        "cybercom_cdr",
+        "cisa_dir"
+      ],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "Inter-agency cyber coordination; classified network access to all IC products. Tacit knowledge of inter-agency equities and allied cyber agreements. Source: NSC public charter; EO 13800."
+    },
+    {
+      "id": "nuclear_cdr",
+      "title": "Commander, U.S. Strategic Command",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "cjcs",
+      "critical_dependencies": [],
+      "capability_weight": 4.0,
+      "bench_depth": 1,
+      "notes": "Nuclear operations authority; allied extended deterrence relationships; ICBM/SLBM/bomber force command experience. KPCI elevated by tacit nuclear command relationships. Source: STRATCOM public charter; 10 U.S.C. \u00a7 161."
+    },
+    {
+      "id": "usd_rd",
+      "title": "USD (Research & Engineering) \u2014 Critical Technologies",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 3.0,
+      "reports_to": "secdef",
+      "critical_dependencies": [
+        "darpa_dir",
+        "dpa_title3",
+        "rare_earth_prog"
+      ],
+      "capability_weight": 3.0,
+      "bench_depth": 0,
+      "notes": "DIB technology transition authority; CHIPS/CICP-adjacent programme oversight. Source: 10 U.S.C. \u00a7 4001; USD(R&E) public org."
+    },
+    {
+      "id": "darpa_dir",
+      "title": "Director, DARPA",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 3.5,
+      "reports_to": "usd_rd",
+      "critical_dependencies": [],
+      "capability_weight": 3.0,
+      "bench_depth": 0,
+      "notes": "Programme manager network relationships; technology horizon knowledge. DARPA PM network is itself a distributed KPV \u2014 individual PMs hold domain-specific tacit knowledge. Source: DARPA public org."
+    },
+    {
+      "id": "dpa_title3",
+      "title": "DoD DPA Title III Programme Director",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 2.5,
+      "reports_to": "usd_rd",
+      "critical_dependencies": [
+        "rare_earth_prog"
+      ],
+      "capability_weight": 3.0,
+      "bench_depth": 0,
+      "notes": "Title III investment authority relationships with domestic processing sector; CICP co-investment programme knowledge. Key person in CICP implementation architecture. Source: 50 U.S.C. \u00a7 4533; DPA Title III public programme descriptions."
+    },
+    {
+      "id": "cybercom_cdr",
+      "title": "Commander, U.S. Cyber Command",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "cjcs",
+      "critical_dependencies": [
+        "nsa_dir"
+      ],
+      "capability_weight": 3.5,
+      "bench_depth": 1,
+      "notes": "Cyber operations authorities; Five Eyes cyber coordination. Source: CYBERCOM public charter; EO 13800."
+    },
+    {
+      "id": "stratcom_cdr",
+      "title": "Commander, Space Command",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "cjcs",
+      "critical_dependencies": [],
+      "capability_weight": 3.0,
+      "bench_depth": 1,
+      "notes": "GPS/PNT architecture oversight; space domain awareness relationships. Source: SPACECOM public charter."
+    },
+    {
+      "id": "cisa_dir",
+      "title": "Director, CISA",
+      "substitution_timeline": 2.5,
+      "documentation_ratio": 2.0,
+      "adversarial_observability": 3.5,
+      "reports_to": "nsa_advisor",
+      "critical_dependencies": [],
+      "capability_weight": 2.5,
+      "bench_depth": 1,
+      "notes": "Critical infrastructure protection coordination; private sector trust relationships. Source: CISA Enabling Act 2018; CISA public org."
+    },
+    {
+      "id": "sec_state",
+      "title": "Secretary of State \u2014 National Security Equities",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "nsa_advisor",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 1,
+      "notes": "Allied foreign minister relationships; arms control negotiation authority. Richard Lugar precedent: relationship capital non-transferable. Source: State Dept public org; CRS."
+    },
+    {
+      "id": "ncs_director",
+      "title": "Director, National Clandestine Service",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 2.5,
+      "reports_to": "cia_director",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "HUMINT network oversight; source protection relationships. Highest tacit knowledge concentration in the IC. Source: CIA public org (limited; by design)."
+    },
+    {
+      "id": "s_t_director",
+      "title": "Director, Science & Technology (CIA)",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 2.0,
+      "reports_to": "cia_director",
+      "critical_dependencies": [],
+      "capability_weight": 2.5,
+      "bench_depth": 1,
+      "notes": "Technical intelligence collection capability. Source: CIA public org."
+    },
+    {
+      "id": "cia_analysis",
+      "title": "Deputy Director for Analysis (CIA)",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 2.5,
+      "reports_to": "cia_director",
+      "critical_dependencies": [],
+      "capability_weight": 2.5,
+      "bench_depth": 1,
+      "notes": "All-source analysis product leadership. Source: CIA public org."
+    },
+    {
+      "id": "rare_earth_prog",
+      "title": "Critical Minerals / CICP Programme Manager",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 2.0,
+      "reports_to": "dpa_title3",
+      "critical_dependencies": [],
+      "capability_weight": 2.5,
+      "bench_depth": 0,
+      "notes": "DPA Title III rare earth processing programme management. Lynas, MP Materials co-investment relationships. CICP Tier-2 KPV. Source: DoD DPA Title III public contract awards."
+    },
+    {
+      "id": "ci_division",
+      "title": "FBI Counterintelligence Division \u2014 China Programme",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 2.0,
+      "reports_to": "fbi_ci",
+      "critical_dependencies": [],
+      "capability_weight": 2.5,
+      "bench_depth": 0,
+      "notes": "Thousand Talents investigation programme knowledge. Source protection for CI sources. Source: FBI public CI programme descriptions; CRS R46749."
+    },
+    {
+      "id": "wmd_directorate",
+      "title": "FBI WMD Directorate",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 2.0,
+      "reports_to": "fbi_ci",
+      "critical_dependencies": [],
+      "capability_weight": 2.0,
+      "bench_depth": 1,
+      "notes": "Nuclear/CBRN counterproliferation programme. Source: FBI public WMD Directorate description."
+    }
+  ]
+}

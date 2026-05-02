@@ -1,0 +1,116 @@
+{
+  "name": "Australia National Security Architecture \u2014 Senior Leadership KPV Assessment",
+  "description": "KPV assessment of Australian national security senior leadership. Sources: AGD public org, ASIO annual reports, ASD public charter, FIRB annual reports, DCI public statements.",
+  "adversarial_org": false,
+  "mission_critical_roles": [
+    "dci_australia",
+    "asio_dg",
+    "asd_dir",
+    "asis_chief"
+  ],
+  "roles": [
+    {
+      "id": "dci_australia",
+      "title": "Director-General, Office of National Intelligence",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 4.0,
+      "reports_to": null,
+      "critical_dependencies": [
+        "asio_dg",
+        "asd_dir",
+        "asis_chief",
+        "firb_chair"
+      ],
+      "capability_weight": 5.0,
+      "bench_depth": 0,
+      "notes": "ONI Director-General; Five Eyes IC coordination. Pine Gap JDF relationship knowledge. Source: ONI public charter; National Security Legislation Amendment Act 2018."
+    },
+    {
+      "id": "asio_dg",
+      "title": "Director-General, ASIO",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "dci_australia",
+      "critical_dependencies": [],
+      "capability_weight": 4.0,
+      "bench_depth": 1,
+      "notes": "Domestic security; FARA/foreign interference investigations. 'Beneficial owner blind spot' language in 2023 PJCIS testimony. Source: ASIO Annual Threat Assessment 2024."
+    },
+    {
+      "id": "asd_dir",
+      "title": "Director-General, Australian Signals Directorate",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "dci_australia",
+      "critical_dependencies": [
+        "acsc_dir"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 1,
+      "notes": "SIGINT and active cyber; AUKUS cyber partnership. Five Eyes ASD contribution. Source: ASD public charter; AUKUS cyber workstream."
+    },
+    {
+      "id": "asis_chief",
+      "title": "Director-General, ASIS",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 3.5,
+      "reports_to": "dci_australia",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "HUMINT collection; Indo-Pacific relationship network. Source: Intelligence Services Act 2001; AGD public descriptions."
+    },
+    {
+      "id": "firb_chair",
+      "title": "Chair, Foreign Investment Review Board",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.0,
+      "adversarial_observability": 3.5,
+      "reports_to": "dci_australia",
+      "critical_dependencies": [],
+      "capability_weight": 3.0,
+      "bench_depth": 1,
+      "notes": "FIRB screening of agricultural land near Pine Gap/Garden Island. 'Beneficial owner blind spot' in non-operating asset transactions. Source: FIRB Annual Report 2022-23; Foreign Acquisitions and Takeovers Act 1975."
+    },
+    {
+      "id": "pine_gap_jdf_cdr",
+      "title": "Commander, Joint Defence Facility Pine Gap",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 3.5,
+      "reports_to": "dci_australia",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 1,
+      "notes": "Joint facility (AUS/US). Agricultural land acquisition proximity concern documented in FIRB 2022-24. Source: JDF Pine Gap public charter; DND public statements."
+    },
+    {
+      "id": "acsc_dir",
+      "title": "Director, Australian Cyber Security Centre",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "asd_dir",
+      "critical_dependencies": [],
+      "capability_weight": 3.0,
+      "bench_depth": 1,
+      "notes": "ACSC; critical infrastructure cyber protection. Source: ACSC public org."
+    },
+    {
+      "id": "lynas_processing_cdr",
+      "title": "Lynas Rare Earths CEO (Strategic Processing Partner)",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 4.0,
+      "reports_to": null,
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "Corporate KPV \u2014 critical to AUKUS/CICP processing architecture. DoD DPA Title III bilateral. Only significant non-Chinese REE separation globally. Source: Lynas ASX filings; DoD DPA Title III contract FY2023."
+    }
+  ]
+}

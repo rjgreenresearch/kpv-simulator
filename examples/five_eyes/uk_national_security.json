@@ -1,0 +1,145 @@
+{
+  "name": "United Kingdom National Security Architecture \u2014 Senior Leadership KPV Assessment",
+  "description": "KPV assessment of UK national security senior leadership. All roles public record. Sources: Cabinet Office, ISC reports, CPNI, public parliamentary records, King's College War Studies research.",
+  "adversarial_org": false,
+  "mission_critical_roles": [
+    "uk_nsa",
+    "gchq_dir",
+    "mi6_c",
+    "mi5_dg",
+    "cdai"
+  ],
+  "roles": [
+    {
+      "id": "uk_nsa",
+      "title": "National Security Adviser (Cabinet Office)",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 4.0,
+      "reports_to": null,
+      "critical_dependencies": [
+        "gchq_dir",
+        "mi6_c",
+        "mi5_dg",
+        "cdai",
+        "uk_jic"
+      ],
+      "capability_weight": 5.0,
+      "bench_depth": 0,
+      "notes": "UK equivalent of U.S. NSA. Five Eyes NSA relationships; NATO/EU intelligence coordination. Source: Cabinet Office public org; ISC annual reports."
+    },
+    {
+      "id": "gchq_dir",
+      "title": "Director, GCHQ",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "uk_nsa",
+      "critical_dependencies": [
+        "ncsc_dir"
+      ],
+      "capability_weight": 4.5,
+      "bench_depth": 0,
+      "notes": "SIGINT partnership lead with NSA/Five Eyes. NSI Act proximity concerns near GCHQ Cheltenham documented in parliamentary debate. Source: GCHQ public org; Hansard NSI Bill debates 2020-21."
+    },
+    {
+      "id": "mi6_c",
+      "title": "Chief, Secret Intelligence Service (MI6)",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "uk_nsa",
+      "critical_dependencies": [],
+      "capability_weight": 4.5,
+      "bench_depth": 0,
+      "notes": "HUMINT network and allied liaison relationships maximally tacit. 'C' designation is publicly known; specific incumbent announced publicly. Source: SIS public statements; ISC reports."
+    },
+    {
+      "id": "mi5_dg",
+      "title": "Director General, Security Service (MI5)",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "uk_nsa",
+      "critical_dependencies": [
+        "mi5_ci",
+        "cpni_dir"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 1,
+      "notes": "Domestic CI and CT programme leadership. CPNI key personnel security architecture. Source: MI5 public org; ISC annual reports."
+    },
+    {
+      "id": "cdai",
+      "title": "Chief of Defence Intelligence",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 3.5,
+      "reports_to": "uk_nsa",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 1,
+      "notes": "UK DI equivalent of DIA director. NATO intelligence committee relationships. Source: MOD public org; parliamentary defence committee reports."
+    },
+    {
+      "id": "ncsc_dir",
+      "title": "Director, National Cyber Security Centre",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "gchq_dir",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 1,
+      "notes": "GCHQ NCSC; Five Eyes cyber partnership coordination. Source: NCSC public org."
+    },
+    {
+      "id": "uk_jic",
+      "title": "Chair, Joint Intelligence Committee",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 3.5,
+      "reports_to": "uk_nsa",
+      "critical_dependencies": [],
+      "capability_weight": 3.0,
+      "bench_depth": 1,
+      "notes": "All-source intelligence assessment coordination across UK IC. Source: Cabinet Office JIC public charter."
+    },
+    {
+      "id": "cpni_dir",
+      "title": "Director, Centre for the Protection of National Infrastructure",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.0,
+      "adversarial_observability": 3.0,
+      "reports_to": "mi5_dg",
+      "critical_dependencies": [],
+      "capability_weight": 2.5,
+      "bench_depth": 1,
+      "notes": "Key Personnel Security architecture owner \u2014 the UK's most developed allied KPV protection programme. Source: CPNI public charter; CPNI 'Sensitive Sites and Personnel Security' 2023."
+    },
+    {
+      "id": "nsi_act_authority",
+      "title": "Head of Investment Security Unit (BEIS/DBT)",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.0,
+      "adversarial_observability": 3.0,
+      "reports_to": "uk_nsa",
+      "critical_dependencies": [],
+      "capability_weight": 2.5,
+      "bench_depth": 0,
+      "notes": "NSI Act 2021 screening authority; analogous to CFIUS. Agricultural land proximity call-in power. Source: NSI Act 2021; BEIS/DBT public guidance."
+    },
+    {
+      "id": "mi5_ci",
+      "title": "MI5 Director General Counterintelligence",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 2.0,
+      "reports_to": "mi5_dg",
+      "critical_dependencies": [],
+      "capability_weight": 2.5,
+      "bench_depth": 0,
+      "notes": "Source protection and CI network relationships. Source: ISC China report 2023."
+    }
+  ]
+}

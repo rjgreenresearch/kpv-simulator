@@ -1,0 +1,134 @@
+{
+  "name": "Islamic Republic of Iran \u2014 Strategic Leadership KPV Assessment (Open Source)",
+  "description": "Open-source KPV assessment of Iranian strategic leadership with emphasis on nuclear programme and IRGC architecture. AO INVERTED. All data from public sources: IAEA reports, ISN, INSS, Wilson Center, CRS, NTI, Bellingcat, ISS.",
+  "adversarial_org": true,
+  "ao_note": "INVERTED AO: High AO = visible to allied OSINT/IAEA inspections. Low AO = significant intelligence gap.",
+  "mission_critical_roles": [
+    "khamenei",
+    "irgc_cdr",
+    "quds_cdr",
+    "aeoi_dir",
+    "nuclear_design_lead_ir"
+  ],
+  "roles": [
+    {
+      "id": "khamenei",
+      "title": "Ayatollah Khamenei \u2014 Supreme Leader",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 4.0,
+      "reports_to": null,
+      "critical_dependencies": [
+        "irgc_cdr",
+        "aeoi_dir",
+        "supreme_council_security"
+      ],
+      "capability_weight": 5.0,
+      "bench_depth": 0,
+      "notes": "Supreme Leader authority over nuclear fatwa, IRGC, and Quds Force. Succession architecture (Assembly of Experts) exists but transition path highly uncertain given factionalism. KPCI=12. Source: Iranian Constitution (public); CRS R44017."
+    },
+    {
+      "id": "irgc_cdr",
+      "title": "IRGC Commander-in-Chief (General Salami)",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "khamenei",
+      "critical_dependencies": [
+        "quds_cdr",
+        "irgc_aerospace",
+        "irgc_cyber"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "Salami publicly identified; sanctioned. IRGC command relationships and missile programme oversight. Source: OFAC SDN (public); IISS Military Balance; CRS RL32048."
+    },
+    {
+      "id": "quds_cdr",
+      "title": "IRGC Quds Force Commander (General Qaani)",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 3.5,
+      "reports_to": "irgc_cdr",
+      "critical_dependencies": [],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "Post-Soleimani. Proxy network relationship management is the highest-DR role in Iranian architecture \u2014 specific cell relationships, intermediary networks, financial channels. Source: OFAC SDN; CRS R46981; ISS."
+    },
+    {
+      "id": "aeoi_dir",
+      "title": "Director, Atomic Energy Organisation of Iran",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "khamenei",
+      "critical_dependencies": [
+        "nuclear_design_lead_ir",
+        "enrichment_ops"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "AEOI Director publicly identified; IAEA interlocutor. Enrichment programme oversight. Source: IAEA safeguards reports (public quarterly); AEOI public announcements; CRS RL34544."
+    },
+    {
+      "id": "nuclear_design_lead_ir",
+      "title": "SPND Nuclear Weapons Design Programme Director",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 2.0,
+      "reports_to": "aeoi_dir",
+      "critical_dependencies": [],
+      "capability_weight": 5.0,
+      "bench_depth": 0,
+      "notes": "SIGNIFICANT INTELLIGENCE GAP: AO=2.0. SPND (Organization of Defensive Innovation and Research) warhead design lead. Fakhrizadeh (assassinated 2020) was the canonical holder; current successor is substantially unknown. This is the Israeli KPV targeting precedent case. Source: Albright/ISIS SPND analysis; IAEA PMD documentation; NTI Iran profile."
+    },
+    {
+      "id": "enrichment_ops",
+      "title": "Natanz / Fordow Enrichment Operations Director",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 3.0,
+      "reports_to": "aeoi_dir",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "Centrifuge cascade operational management. IAEA inspection access provides partial visibility. Source: IAEA quarterly safeguards reports (public); ISIS analyses."
+    },
+    {
+      "id": "irgc_aerospace",
+      "title": "IRGC Aerospace Force Commander (Hajizadeh)",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "irgc_cdr",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "Hajizadeh publicly identified; sanctioned. Ballistic missile and UAV programme. Shahed-136 drone design knowledge. Source: OFAC SDN; CSIS missile defence project; CRS R46510."
+    },
+    {
+      "id": "irgc_cyber",
+      "title": "IRGC Cyber Command Director",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 2.0,
+      "reports_to": "irgc_cdr",
+      "critical_dependencies": [],
+      "capability_weight": 3.0,
+      "bench_depth": 0,
+      "notes": "INTELLIGENCE GAP: AO=2.0. APT33/34/35 attributed to IRGC/MOIS at entity level; operational directors opaque. Source: FireEye APT33/34 reports; CISA AA22-055A (public)."
+    },
+    {
+      "id": "supreme_council_security",
+      "title": "Secretary, Supreme National Security Council",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "khamenei",
+      "critical_dependencies": [],
+      "capability_weight": 3.0,
+      "bench_depth": 0,
+      "notes": "SNSC coordination; nuclear decision authority delegation. Publicly identified role. Source: Iranian Constitution; CRS R44017."
+    }
+  ]
+}

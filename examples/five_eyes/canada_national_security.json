@@ -1,0 +1,102 @@
+{
+  "name": "Canada National Security Architecture \u2014 Senior Leadership KPV Assessment",
+  "description": "KPV assessment of Canadian national security senior leadership. Sources: PCO public org, CSIS annual reports, CSE public charter, parliamentary security committee reports.",
+  "adversarial_org": false,
+  "mission_critical_roles": [
+    "nsa_canada",
+    "csis_dir",
+    "cse_chief",
+    "rcmp_nsb"
+  ],
+  "roles": [
+    {
+      "id": "nsa_canada",
+      "title": "National Security and Intelligence Adviser to the PM",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 4.0,
+      "reports_to": null,
+      "critical_dependencies": [
+        "csis_dir",
+        "cse_chief",
+        "rcmp_nsb",
+        "nsia_coord"
+      ],
+      "capability_weight": 5.0,
+      "bench_depth": 0,
+      "notes": "PCO NSIA; Five Eyes NSA relationships; IC and PM coordination. Source: PCO public org; NSIRA annual reports."
+    },
+    {
+      "id": "csis_dir",
+      "title": "Director, CSIS",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "nsa_canada",
+      "critical_dependencies": [],
+      "capability_weight": 4.0,
+      "bench_depth": 1,
+      "notes": "CSIS HUMINT and CI. Senate NSICOP testimony re: shell company problem in ICA reviews. Source: CSIS Annual Report; NSICOP public reports 2024."
+    },
+    {
+      "id": "cse_chief",
+      "title": "Chief, Communications Security Establishment",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "nsa_canada",
+      "critical_dependencies": [],
+      "capability_weight": 4.0,
+      "bench_depth": 1,
+      "notes": "SIGINT and active cyber operations. Five Eyes SIGINT partner. Source: CSE public charter; NSI Act Canada 2019."
+    },
+    {
+      "id": "rcmp_nsb",
+      "title": "RCMP National Security Programme Director",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.0,
+      "adversarial_observability": 3.5,
+      "reports_to": "nsa_canada",
+      "critical_dependencies": [],
+      "capability_weight": 3.0,
+      "bench_depth": 1,
+      "notes": "Federal law enforcement/national security. ICA review support. Source: RCMP public org."
+    },
+    {
+      "id": "ica_authority",
+      "title": "Director of Investments, Investment Canada",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.0,
+      "adversarial_observability": 3.0,
+      "reports_to": "nsa_canada",
+      "critical_dependencies": [],
+      "capability_weight": 2.5,
+      "bench_depth": 0,
+      "notes": "ICA national security review authority; CFIUS Canadian equivalent. Shell company beneficial ownership gap documented in 2024 NSICOP testimony. Source: ICA R.S.C. 1985 c.28; NSICOP 2024."
+    },
+    {
+      "id": "nsia_coord",
+      "title": "NSIA Deputy \u2014 Intelligence Assessment",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 2.5,
+      "reports_to": "nsa_canada",
+      "critical_dependencies": [],
+      "capability_weight": 2.5,
+      "bench_depth": 0,
+      "notes": "Intelligence assessment coordination across IC. Source: PCO public org."
+    },
+    {
+      "id": "cfb_trenton_cdr",
+      "title": "Commander, CFB Trenton (Strategic Airlift Hub)",
+      "substitution_timeline": 2.5,
+      "documentation_ratio": 2.0,
+      "adversarial_observability": 3.0,
+      "reports_to": null,
+      "critical_dependencies": [],
+      "capability_weight": 2.0,
+      "bench_depth": 1,
+      "notes": "ICA reviews near CFB Trenton documented in NSICOP agricultural land analysis. Canadian Forces primary strategic airlift. Source: DND public org; NSICOP."
+    }
+  ]
+}

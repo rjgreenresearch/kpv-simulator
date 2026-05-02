@@ -1,0 +1,120 @@
+{
+  "name": "Democratic People's Republic of Korea \u2014 Strategic Leadership KPV Assessment (Open Source)",
+  "description": "Open-source KPV assessment of DPRK strategic leadership. AO INVERTED. DPRK is the most opaque major adversarial architecture; many AO scores are low (1.0-1.5) indicating significant allied intelligence gaps. All data from public sources: 38 North, KIDA, RAND, IISS, NTI, CRS.",
+  "adversarial_org": true,
+  "ao_note": "INVERTED AO. DPRK is the most opaque major adversarial org \u2014 low AO scores indicate significant intelligence gaps that are themselves strategic findings.",
+  "mission_critical_roles": [
+    "kim_jung_un",
+    "rgb_dir",
+    "nuke_design_dprk",
+    "icbm_prog_dir"
+  ],
+  "roles": [
+    {
+      "id": "kim_jung_un",
+      "title": "Kim Jong Un \u2014 Supreme Leader / WPK General Secretary / SAC Chairman",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 4.0,
+      "reports_to": null,
+      "critical_dependencies": [
+        "rgb_dir",
+        "nuke_design_dprk",
+        "icbm_prog_dir",
+        "party_org_bureau"
+      ],
+      "capability_weight": 5.0,
+      "bench_depth": 0,
+      "notes": "Most hypercentralised adversarial architecture. Kim Yo Jong (sister) and Kim Jong Chol (brother) as potential successors; Kim Ju Ae (daughter) being publicly positioned. Succession architecture is informal and opaque. Source: 38 North; KIDA; CRS R41438."
+    },
+    {
+      "id": "kim_yo_jong",
+      "title": "Kim Yo Jong \u2014 First Deputy Director, WPK Propaganda",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 3.5,
+      "reports_to": "kim_jung_un",
+      "critical_dependencies": [
+        "party_org_bureau"
+      ],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "Publicly identified; substantive policy authority documented through public statements. Second most powerful individual in DPRK by open-source analysis. Source: 38 North; NK News; CRS R41438."
+    },
+    {
+      "id": "rgb_dir",
+      "title": "Director, Reconnaissance General Bureau",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 2.0,
+      "reports_to": "kim_jung_un",
+      "critical_dependencies": [
+        "unit_121_cyber",
+        "bureau_39"
+      ],
+      "capability_weight": 4.5,
+      "bench_depth": 0,
+      "notes": "INTELLIGENCE GAP: AO=2.0. RGB controls Lazarus Group (Unit 121) cyber, foreign currency operations, and HUMINT. Director identity uncertain/disputed in open sources. Source: UN Panel of Experts reports; CISA AA22-108A; Mandiant UNC4899."
+    },
+    {
+      "id": "unit_121_cyber",
+      "title": "RGB Unit 121 \u2014 Cyber Operations Director (Lazarus Group)",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 1.0,
+      "reports_to": "rgb_dir",
+      "critical_dependencies": [],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "CRITICAL INTELLIGENCE GAP: AO=1.0. Lazarus Group leadership is the most opaque cyber operational node in any major adversarial architecture. Crypto theft ($3B+ 2021-2023) funds WMD programme. Source: UN 1718 Committee reports; US-CERT AA22-108A; CISA advisories."
+    },
+    {
+      "id": "nuke_design_dprk",
+      "title": "Chief Nuclear Weapons Designer \u2014 NWRC / Yongbyon",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 1.0,
+      "reports_to": "kim_jung_un",
+      "critical_dependencies": [],
+      "capability_weight": 5.0,
+      "bench_depth": 0,
+      "notes": "CRITICAL INTELLIGENCE GAP: AO=1.0. The single most consequential intelligence gap in adversarial KPV analysis. DPRK warhead design leadership is essentially unknown to allied open-source analysts. 30-60 weapons estimated. Source: 38 North Yongbyon analysis; SIPRI DPRK estimate; NTI DPRK."
+    },
+    {
+      "id": "icbm_prog_dir",
+      "title": "ICBM Programme Director \u2014 Hwasong-17/18 Development",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 1.5,
+      "reports_to": "kim_jung_un",
+      "critical_dependencies": [],
+      "capability_weight": 4.5,
+      "bench_depth": 0,
+      "notes": "INTELLIGENCE GAP: AO=1.5. Hwasong-17 (liquid ICBM) and Hwasong-18 (solid ICBM) programme directors are unknown. KCNA announces test events but technical leadership is opaque. Source: KCNA public test announcements; 38 North imagery analysis; RAND PE-388."
+    },
+    {
+      "id": "party_org_bureau",
+      "title": "WPK Organisation and Guidance Department Director",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 2.0,
+      "reports_to": "kim_jung_un",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "OGD controls party discipline and surveillance over military/security services. Historically most powerful node beneath Supreme Leader. AO=2.0 \u2014 leadership identity uncertain. Source: Lankov; KIDA; 38 North political analysis."
+    },
+    {
+      "id": "bureau_39",
+      "title": "Office 39 Director \u2014 Foreign Currency Operations",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 1.5,
+      "reports_to": "rgb_dir",
+      "critical_dependencies": [],
+      "capability_weight": 3.0,
+      "bench_depth": 0,
+      "notes": "WMD and regime financing through sanctions evasion; crypto theft coordination with Unit 121. Source: UN 1718 Committee reports; Treasury OFAC SDN (entity-level); CRS R41438."
+    }
+  ]
+}

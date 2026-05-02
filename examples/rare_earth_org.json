@@ -1,0 +1,170 @@
+{
+  "name": "U.S. Domestic Rare Earth Processing Programme",
+  "description": "Models KPCI vulnerabilities in a Mountain Pass-scale REE separation programme. Demonstrates Tier-1 KPV architecture from MTS Paper 4 / CICP \u00a73.1.",
+  "mission_critical_roles": [
+    "chief_sep_chemist",
+    "heavy_ree_specialist",
+    "dod_program_exec"
+  ],
+  "roles": [
+    {
+      "id": "chief_sep_chemist",
+      "title": "Chief Separation Process Chemist",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 3.5,
+      "reports_to": "vp_technical",
+      "critical_dependencies": [
+        "process_ops",
+        "qa_lead",
+        "scale_up"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "Irreplaceable HRE separation tacit knowledge; Thousand Talents target profile."
+    },
+    {
+      "id": "heavy_ree_specialist",
+      "title": "Heavy REE Extraction Specialist (Dy/Tb)",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 3.0,
+      "reports_to": "chief_sep_chemist",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "Dy/Tb separation; essential for THAAD/PAC-3 guidance magnets."
+    },
+    {
+      "id": "dod_program_exec",
+      "title": "DoD DPA Title III Programme Executive",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "ceo",
+      "critical_dependencies": [],
+      "capability_weight": 3.0,
+      "bench_depth": 0,
+      "notes": "Personal relationship with DoD PM office; high public visibility."
+    },
+    {
+      "id": "vp_technical",
+      "title": "VP Technical Operations",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 2.0,
+      "adversarial_observability": 3.5,
+      "reports_to": "ceo",
+      "critical_dependencies": [
+        "chief_sep_chemist",
+        "process_ops"
+      ],
+      "capability_weight": 2.5,
+      "bench_depth": 1
+    },
+    {
+      "id": "allied_liaison",
+      "title": "Lynas/Australia Supply Chain Liaison",
+      "substitution_timeline": 3.0,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 2.0,
+      "reports_to": "ceo",
+      "critical_dependencies": [],
+      "capability_weight": 2.5,
+      "bench_depth": 0,
+      "notes": "20-year Lynas relationship; undocumented."
+    },
+    {
+      "id": "scale_up",
+      "title": "Commercial Scale-Up Engineer",
+      "substitution_timeline": 2.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 2.5,
+      "reports_to": "vp_technical",
+      "critical_dependencies": [
+        "process_ops"
+      ],
+      "capability_weight": 2.0,
+      "bench_depth": 0
+    },
+    {
+      "id": "regulatory_lead",
+      "title": "EPA/NRC Regulatory Compliance Lead",
+      "substitution_timeline": 2.5,
+      "documentation_ratio": 1.5,
+      "adversarial_observability": 2.0,
+      "reports_to": "vp_technical",
+      "critical_dependencies": [],
+      "capability_weight": 2.0,
+      "bench_depth": 0
+    },
+    {
+      "id": "ceo",
+      "title": "Chief Executive Officer",
+      "substitution_timeline": 2.5,
+      "documentation_ratio": 1.5,
+      "adversarial_observability": 3.0,
+      "reports_to": null,
+      "critical_dependencies": [
+        "dod_program_exec",
+        "allied_liaison"
+      ],
+      "capability_weight": 2.0,
+      "bench_depth": 0
+    },
+    {
+      "id": "process_ops",
+      "title": "Process Operations Manager",
+      "substitution_timeline": 2.0,
+      "documentation_ratio": 1.5,
+      "adversarial_observability": 1.5,
+      "reports_to": "vp_technical",
+      "critical_dependencies": [],
+      "capability_weight": 1.5,
+      "bench_depth": 1
+    },
+    {
+      "id": "qa_lead",
+      "title": "Quality Assurance Lead",
+      "substitution_timeline": 1.5,
+      "documentation_ratio": 1.0,
+      "adversarial_observability": 1.0,
+      "reports_to": "vp_technical",
+      "critical_dependencies": [],
+      "capability_weight": 1.0,
+      "bench_depth": 1
+    },
+    {
+      "id": "lab_tech_sr",
+      "title": "Senior Laboratory Technician",
+      "substitution_timeline": 1.0,
+      "documentation_ratio": 0.5,
+      "adversarial_observability": 0.5,
+      "reports_to": "chief_sep_chemist",
+      "critical_dependencies": [],
+      "capability_weight": 0.75,
+      "bench_depth": 2
+    },
+    {
+      "id": "lab_tech",
+      "title": "Laboratory Technician",
+      "substitution_timeline": 0.5,
+      "documentation_ratio": 0.5,
+      "adversarial_observability": 0.5,
+      "reports_to": "chief_sep_chemist",
+      "critical_dependencies": [],
+      "capability_weight": 0.5,
+      "bench_depth": 3
+    },
+    {
+      "id": "finance_mgr",
+      "title": "Finance & Contracts Manager",
+      "substitution_timeline": 1.0,
+      "documentation_ratio": 0.5,
+      "adversarial_observability": 1.0,
+      "reports_to": "ceo",
+      "critical_dependencies": [],
+      "capability_weight": 0.75,
+      "bench_depth": 1
+    }
+  ]
+}

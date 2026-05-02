@@ -1,0 +1,202 @@
+{
+  "name": "People's Republic of China \u2014 Strategic Leadership KPV Assessment (Open Source)",
+  "description": "Open-source KPV assessment of PRC strategic leadership and key technical programme nodes. AO component INVERTED for adversarial org: AO = observability to allied intelligence via open-source/OSINT, NOT observability to a foreign adversary. All data from public sources: CCP public announcements, CSET/Stanford DigiChina, Carnegie, CSIS, CRS reports, state media. No classified sources.",
+  "adversarial_org": true,
+  "ao_note": "INVERTED AO: High AO = clearly visible to allied OSINT. Low AO = opaque to allied intelligence \u2014 indicates intelligence gap requiring attention.",
+  "mission_critical_roles": [
+    "xi_jinping",
+    "cmc_chair_staff",
+    "mss_minister",
+    "miit_minister",
+    "sastind_dir",
+    "chief_ree_chemist_cn",
+    "nuclear_design_chief_cn",
+    "ai_programme_lead"
+  ],
+  "roles": [
+    {
+      "id": "xi_jinping",
+      "title": "Xi Jinping \u2014 General Secretary / CMC Chairman / President",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 4.0,
+      "reports_to": null,
+      "critical_dependencies": [
+        "cmc_chair_staff",
+        "psc_2",
+        "mss_minister",
+        "miit_minister"
+      ],
+      "capability_weight": 5.0,
+      "bench_depth": 0,
+      "notes": "Personal authority over CMC, MSS, MIIT, nuclear programme. Succession architecture explicitly dismantled 2018 (term limits removed). KPCI=12; no succession mechanism identified. Source: CCP party charter (public); Xinhua public announcements; CRS R46307."
+    },
+    {
+      "id": "psc_2",
+      "title": "PSC Standing Committee \u2014 Li Qiang (Premier)",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 4.0,
+      "reports_to": "xi_jinping",
+      "critical_dependencies": [
+        "miit_minister"
+      ],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "State Council economic coordination; MIIT and industrial policy oversight. Source: State Council public org; Xinhua; CRS Chinese leadership tracker."
+    },
+    {
+      "id": "cmc_chair_staff",
+      "title": "CMC Joint Staff Department Director",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 3.0,
+      "reports_to": "xi_jinping",
+      "critical_dependencies": [
+        "pla_rocket_force"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "PLA operational command coordination. Rocket Force oversight post-2023 restructuring. Source: IISS Military Balance; public PLA org; RAND OP-657."
+    },
+    {
+      "id": "pla_rocket_force",
+      "title": "PLARF Commander (Rocket Force)",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 3.5,
+      "reports_to": "cmc_chair_staff",
+      "critical_dependencies": [],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "ICBM and conventional missile force. Post-2023 purge; succession uncertainty elevated. Source: Public PLA announcements; RAND OP-657; CRS RL33153."
+    },
+    {
+      "id": "mss_minister",
+      "title": "Minister, Ministry of State Security",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 3.5,
+      "reports_to": "xi_jinping",
+      "critical_dependencies": [
+        "thousand_talents_ops",
+        "mss_cyber"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "MSS HUMINT, CI, and Thousand Talents Programme oversight. Source network relationships maximally tacit. KPCI elevated by AO=3.5 (publicly identified role; specific incumbent known). Source: Public MOJ/NPC records; Congressional Hearing 2023 on MSS; FBI CI reports."
+    },
+    {
+      "id": "thousand_talents_ops",
+      "title": "MSS \u2014 Thousand Talents Programme Operations Director",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 1.5,
+      "reports_to": "mss_minister",
+      "critical_dependencies": [],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "CRITICAL INTELLIGENCE GAP: AO=1.5 indicates this role is largely opaque to allied OSINT. Operational management of systematic KPV mapping against US/allied targets. Source: Senate PSI 2019 report (public); FBI CI public statements; DOJ prosecution records."
+    },
+    {
+      "id": "miit_minister",
+      "title": "Minister, Ministry of Industry and Information Technology",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": "psc_2",
+      "critical_dependencies": [
+        "ree_enforcement"
+      ],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "REE export restriction enforcement (April 29 2026 rules). MIIT is the processing monopoly enforcement architecture. Source: MIIT public announcements; China Daily; CSIS Critical Minerals Security Program."
+    },
+    {
+      "id": "ree_enforcement",
+      "title": "MIIT \u2014 Rare Earth Division Director",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 3.5,
+      "reports_to": "miit_minister",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "REE production quota allocation and enforcement. April 29 2026 administrative penalties rules. The operational node for China's primary strategic leverage. Source: MIIT REE management regulations (public); CSIS; Benchmark Mineral Intelligence."
+    },
+    {
+      "id": "sastind_dir",
+      "title": "Director, SASTIND (Science/Tech/Industry for National Defence)",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 3.0,
+      "reports_to": "psc_2",
+      "critical_dependencies": [
+        "nuclear_design_chief_cn"
+      ],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "Defence-industrial coordination including key person protection lists for critical technical contributors (China's equivalent of NKPR). Source: SASTIND public charter; Hannas et al. 2013 Chinese Industrial Espionage; Georgetown CSET."
+    },
+    {
+      "id": "chief_ree_chemist_cn",
+      "title": "Lead Separation Process Chemist \u2014 BGRIMM / Chalco",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 3.5,
+      "adversarial_observability": 2.0,
+      "reports_to": "ree_enforcement",
+      "critical_dependencies": [],
+      "capability_weight": 4.5,
+      "bench_depth": 2,
+      "notes": "INTELLIGENCE GAP: AO=2.0. The individual(s) holding the specific solvent extraction chemistry knowledge for heavy REE separation at commercial scale. China has ~10-15 such individuals; they are protected under SASTIND key person protocols. Source: BGRIMM public org; Chinese academic publications; Wood Mackenzie."
+    },
+    {
+      "id": "nuclear_design_chief_cn",
+      "title": "Lead Nuclear Warhead Designer \u2014 CAEP (China Academy Engineering Physics)",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 1.5,
+      "reports_to": "sastind_dir",
+      "critical_dependencies": [],
+      "capability_weight": 5.0,
+      "bench_depth": 1,
+      "notes": "SIGNIFICANT INTELLIGENCE GAP: AO=1.5. CAEP warhead design physicists are protected under China's most restrictive key person security protocols. Source: CAEP public org (limited); NTI China nuclear programme analysis; CRS RL33153."
+    },
+    {
+      "id": "ai_programme_lead",
+      "title": "AI Programme Director \u2014 MSRA / Tsinghua / National AI Lab",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 3.0,
+      "adversarial_observability": 3.5,
+      "reports_to": "miit_minister",
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 1,
+      "notes": "AI capability development lead \u2014 publicly identifiable through academic publications. Multiple individuals across MSRA, Tsinghua IIIS, and affiliated labs. Source: Stanford HAI AI Index; Georgetown CSET talent tracker."
+    },
+    {
+      "id": "mss_cyber",
+      "title": "MSS APT Operations Director (Unit 61398/61486 analogue)",
+      "substitution_timeline": 4.0,
+      "documentation_ratio": 4.0,
+      "adversarial_observability": 1.0,
+      "reports_to": "mss_minister",
+      "critical_dependencies": [],
+      "capability_weight": 4.0,
+      "bench_depth": 0,
+      "notes": "CRITICAL INTELLIGENCE GAP: AO=1.0. MSS offensive cyber operational directors are the most opaque node in PRC strategic architecture. Mandiant APT attribution is entity-level, not individual-level. Source: Mandiant APT reports; DOJ indictments (entity-level); NSA/CISA advisories."
+    },
+    {
+      "id": "catl_ceo",
+      "title": "CATL CEO / Founder (Zeng Yuqun)",
+      "substitution_timeline": 3.5,
+      "documentation_ratio": 2.5,
+      "adversarial_observability": 4.0,
+      "reports_to": null,
+      "critical_dependencies": [],
+      "capability_weight": 3.5,
+      "bench_depth": 0,
+      "notes": "Corporate KPV: CATL controls 37% global EV battery market; sodium-ion/iron flow technology transition. Publicly identified; CCP political exposure. Source: CATL public filings; BloombergNEF; Reuters."
+    }
+  ]
+}

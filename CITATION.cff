@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+message: "If you use KPVS in academic work, please cite as follows."
+type: software
+title: "Key Person Vulnerability Simulator (KPVS)"
+version: 1.0.0
+date-released: "2026-05-01"
+authors:
+  - family-names: Green
+    given-names: Robert J.
+    orcid: "https://orcid.org/0009-0002-9097-1021"
+    affiliation: "Independent Researcher, Melbourne, Florida"
+    email: robert@rjgreenresearch.org
+url: "https://github.com/rjgreenresearch/kpv-simulator"
+repository-code: "https://github.com/rjgreenresearch/kpv-simulator"
+license: Apache-2.0
+abstract: >
+  Open-source Monte Carlo simulation tool for quantifying Key Person
+  Vulnerability (KPV) in organizational networks. Implements the KPCI
+  framework from MTS Working Paper 5 and produces adversarial targeting
+  gap analysis, cascade failure distributions, and optimal bench
+  investment allocation. Companion tool to the Cost-Asymmetry Simulator
+  (github.com/rjgreenresearch/cost-asymmetry-simulator).
+keywords:
+  - key person vulnerability
+  - organizational resilience
+  - Monte Carlo simulation
+  - national security
+  - human capital
+  - succession planning
+  - compound vulnerability
+preferred-citation:
+  type: generic
+  title: >
+    The Irreplaceable Node: Key Person Concentration as a Compound
+    National Security Vulnerability
+  authors:
+    - family-names: Green
+      given-names: Robert J.
+  year: 2026
+  notes: >
+    MTS Research Programme Working Paper 5.
+    Available at ssrn.com/author=10825096

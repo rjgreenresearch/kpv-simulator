@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Leadership Organization",
+  "type": "object",
+  "required": ["id", "country_code", "name"],
+  "properties": {
+    "id": { "type": "string" },
+    "country_code": { "type": "string" },
+    "name": { "type": "string" },
+    "name_native": {
+      "type": "string",
+      "nullable": true
+    },
+    "type": {
+      "type": "string",
+      "description": "e.g., general staff, ministry, service HQ, nuclear lab, SOE"
+    },
+    "sector": {
+      "type": "string",
+      "description": "military, intelligence, nuclear, industrial, etc.",
+      "nullable": true
+    },
+    "mission": {
+      "type": "string",
+      "nullable": true
+    },
+    "parent_org_id": {
+      "type": "string",
+      "nullable": true
+    },
+    "child_org_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "key_personnel_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "notes": {
+      "type": "string",
+      "nullable": true
+    }
+  },
+  "additionalProperties": false
+}

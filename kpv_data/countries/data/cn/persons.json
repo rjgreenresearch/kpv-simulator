@@ -1,0 +1,122 @@
+[
+  {
+    "id": "cn_person_zhang_youxia",
+    "country_code": "CN",
+    "name_native": "张又侠",
+    "name_latin": "Zhang Youxia",
+    "aliases": ["Chang You-hsia"],
+    "sector": "military",
+    "rank_or_grade": "General",
+    "service_or_agency": "Central Military Commission",
+    "current_position": "Vice Chairman, CMC",
+    "current_org_id": "cn_org_cmc",
+    "career_history": [
+      {
+        "org_id": "cn_org_cmc",
+        "position": "Vice Chairman",
+        "start_year": 2017,
+        "end_year": null
+      },
+      {
+        "org_id": "cn_org_ground_force",
+        "position": "Deputy Chief of General Staff",
+        "start_year": 2012,
+        "end_year": 2016
+      }
+    ],
+    "academic_profiles": {
+      "cnki": null,
+      "wos": null,
+      "orcid": null,
+      "ssrn": null,
+      "researchgate": null,
+      "scopus": null,
+      "patents": []
+    },
+    "thematic_keywords": ["joint operations", "ground warfare", "CMC leadership"],
+    "political_alignment_score": 0.92,
+    "technical_expertise_score": 0.40,
+    "doctrinal_influence_score": 0.75,
+    "promotion_velocity_score": 0.88,
+    "purge_or_arrest_risk_score": 0.10,
+    "notes": "Longtime Xi ally; princeling background."
+  },
+  {
+    "id": "cn_person_wang_houbin",
+    "country_code": "CN",
+    "name_native": "王厚斌",
+    "name_latin": "Wang Houbin",
+    "aliases": [],
+    "sector": "military",
+    "rank_or_grade": "General",
+    "service_or_agency": "PLA Rocket Force",
+    "current_position": "Commander, PLA Rocket Force",
+    "current_org_id": "cn_org_rocket_force",
+    "career_history": [
+      {
+        "org_id": "cn_org_rocket_force",
+        "position": "Commander",
+        "start_year": 2023,
+        "end_year": null
+      },
+      {
+        "org_id": "cn_org_navy",
+        "position": "Deputy Commander",
+        "start_year": 2020,
+        "end_year": 2023
+      }
+    ],
+    "academic_profiles": {
+      "cnki": "https://cnki.example/author/wang_houbin",
+      "wos": null,
+      "orcid": null,
+      "ssrn": null,
+      "researchgate": null,
+      "scopus": null,
+      "patents": []
+    },
+    "thematic_keywords": ["missile forces", "nuclear posture", "joint fires"],
+    "political_alignment_score": 0.70,
+    "technical_expertise_score": 0.82,
+    "doctrinal_influence_score": 0.55,
+    "promotion_velocity_score": 0.90,
+    "purge_or_arrest_risk_score": 0.35,
+    "notes": "Unusual cross‑service career path; appointed after Rocket Force purge."
+  },
+  {
+    "id": "cn_person_ju_qiansheng",
+    "country_code": "CN",
+    "name_native": "巨乾生",
+    "name_latin": "Ju Qiansheng",
+    "aliases": [],
+    "sector": "military",
+    "rank_or_grade": "Lieutenant General",
+    "service_or_agency": "Strategic Support Force",
+    "current_position": "Commander, SSF",
+    "current_org_id": "cn_org_ssf",
+    "career_history": [
+      {
+        "org_id": "cn_org_ssf",
+        "position": "Commander",
+        "start_year": 2021,
+        "end_year": null
+      }
+    ],
+    "academic_profiles": {
+      "cnki": "https://cnki.example/author/ju_qiansheng",
+      "wos": null,
+      "orcid": null,
+      "ssrn": null,
+      "researchgate": null,
+      "scopus": null,
+      "patents": ["CN2020XXXXA"]
+    },
+    "thematic_keywords": ["space operations", "cyber operations", "ISR"],
+    "political_alignment_score": 0.68,
+    "technical_expertise_score": 0.91,
+    "doctrinal_influence_score": 0.62,
+    "promotion_velocity_score": 0.77,
+    "purge_or_arrest_risk_score": 0.28,
+    "notes": "Technical background; strong influence in space and cyber doctrine."
+  }
+]

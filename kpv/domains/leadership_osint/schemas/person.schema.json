@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Leadership Person",
+  "type": "object",
+  "required": ["id", "country_code", "name_native"],
+  "properties": {
+    "id": { "type": "string" },
+    "country_code": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2 or custom (e.g., 'CN','RU','IR','KP')"
+    },
+    "name_native": {
+      "type": "string",
+      "description": "Name in native script"
+    },
+    "name_latin": {
+      "type": "string",
+      "description": "Romanized name",
+      "nullable": true
+    },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "sector": {
+      "type": "string",
+      "description": "military, intelligence, nuclear, political, industrial, etc."
+    },
+    "rank_or_grade": {
+      "type": "string",
+      "description": "Rank, grade, or seniority marker",
+      "nullable": true
+    },
+    "service_or_agency": {
+      "type": "string",
+      "description": "Service, ministry, agency, or organization",
+      "nullable": true
+    },
+    "current_position": {
+      "type": "string",
+      "nullable": true
+    },
+    "current_org_id": {
+      "type": "string",
+      "nullable": true
+    },
+    "career_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["org_id", "position", "start_year"],
+        "properties": {
+          "org_id": { "type": "string" },
+          "position": { "type": "string" },
+          "start_year": { "type": "integer" },
+          "end_year": { "type": ["integer", "null"] }
+        }
+      }
+    },
+    "academic_profiles": {
+      "type": "object",
+      "properties": {
+        "cnki": { "type": ["string", "null"] },
+        "wos": { "type": ["string", "null"] },
+        "orcid": { "type": ["string", "null"] },
+        "ssrn": { "type": ["string", "null"] },
+        "researchgate": { "type": ["string", "null"] },
+        "scopus": { "type": ["string", "null"] },
+        "patents": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "thematic_keywords": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "political_alignment_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "technical_expertise_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "doctrinal_influence_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "promotion_velocity_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "purge_or_arrest_risk_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "notes": {
+      "type": "string",
+      "nullable": true
+    }
+  },
+  "additionalProperties": false
+}

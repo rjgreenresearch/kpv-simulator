@@ -1,0 +1,54 @@
+[
+  {
+    "id": "cn_org_cmc",
+    "country_code": "CN",
+    "name": "Central Military Commission",
+    "name_native": "中央军事委员会",
+    "type": "CMC",
+    "sector": "military",
+    "mission": "Supreme military command authority of the PRC.",
+    "parent_org_id": null,
+    "child_org_ids": ["cn_org_rocket_force", "cn_org_ssf", "cn_org_ground_force"],
+    "key_personnel_ids": ["cn_person_zhang_youxia"],
+    "notes": "Xi Jinping chairs the CMC."
+  },
+  {
+    "id": "cn_org_rocket_force",
+    "country_code": "CN",
+    "name": "PLA Rocket Force",
+    "name_native": "中国人民解放军火箭军",
+    "type": "service",
+    "sector": "military",
+    "mission": "Conventional and nuclear missile forces.",
+    "parent_org_id": "cn_org_cmc",
+    "child_org_ids": [],
+    "key_personnel_ids": ["cn_person_wang_houbin"],
+    "notes": "Experienced major purge in 2023."
+  },
+  {
+    "id": "cn_org_ssf",
+    "country_code": "CN",
+    "name": "Strategic Support Force",
+    "name_native": "战略支援部队",
+    "type": "service",
+    "sector": "military",
+    "mission": "Space, cyber, electronic warfare, and information operations.",
+    "parent_org_id": "cn_org_cmc",
+    "child_org_ids": [],
+    "key_personnel_ids": ["cn_person_ju_qiansheng"],
+    "notes": "Key to 'intelligentized warfare' modernization."
+  },
+  {
+    "id": "cn_org_ground_force",
+    "country_code": "CN",
+    "name": "PLA Ground Force",
+    "name_native": "中国人民解放军陆军",
+    "type": "service",
+    "sector": "military",
+    "mission": "Land operations.",
+    "parent_org_id": "cn_org_cmc",
+    "child_org_ids": [],
+    "key_personnel_ids": [],
+    "notes": null
+  }
+]

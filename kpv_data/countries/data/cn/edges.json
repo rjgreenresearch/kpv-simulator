@@ -1,0 +1,42 @@
+[
+  {
+    "source": "cn_person_zhang_youxia",
+    "target": "cn_org_cmc",
+    "type": "commands",
+    "weight": 0.95,
+    "evidence": ["official_position"],
+    "notes": null
+  },
+  {
+    "source": "cn_person_wang_houbin",
+    "target": "cn_org_rocket_force",
+    "type": "commands",
+    "weight": 0.90,
+    "evidence": ["official_position"],
+    "notes": null
+  },
+  {
+    "source": "cn_person_ju_qiansheng",
+    "target": "cn_org_ssf",
+    "type": "commands",
+    "weight": 0.90,
+    "evidence": ["official_position"],
+    "notes": null
+  },
+  {
+    "source": "cn_person_zhang_youxia",
+    "target": "cn_person_wang_houbin",
+    "type": "patronage",
+    "weight": 0.40,
+    "evidence": ["cross-service appointment", "CMC oversight"],
+    "notes": "CMC influence over Rocket Force appointments."
+  },
+  {
+    "source": "cn_person_ju_qiansheng",
+    "target": "cn_person_wang_houbin",
+    "type": "cohort",
+    "weight": 0.20,
+    "evidence": ["joint operations training"],
+    "notes": null
+  }
+]

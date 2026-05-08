@@ -1,77 +1,84 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Leadership Person",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KPV Person Schema",
   "type": "object",
-  "required": ["id", "country_code", "name_native"],
+  "required": [
+    "id",
+    "country_code",
+    "name_native",
+    "name_latin",
+    "aliases",
+    "sector",
+    "service_or_agency",
+    "current_position",
+    "career_history",
+    "academic_profiles",
+    "thematic_keywords",
+    "political_alignment_score",
+    "technical_expertise_score",
+    "doctrinal_influence_score",
+    "promotion_velocity_score",
+    "purge_or_arrest_risk_score"
+  ],
   "properties": {
-    "id": { "type": "string" },
+    "id": {
+      "type": ["string", "null"],
+      "description": "Unique person identifier assigned by the ingestion pipeline"
+    },
     "country_code": {
       "type": "string",
-      "description": "ISO 3166-1 alpha-2 or custom (e.g., 'CN','RU','IR','KP')"
+      "pattern": "^[A-Z]{2}$",
+      "description": "ISO-style country code (CN, RU, IR, KP)"
     },
     "name_native": {
-      "type": "string",
-      "description": "Name in native script"
+      "type": ["string", "null"]
     },
     "name_latin": {
-      "type": "string",
-      "description": "Romanized name",
-      "nullable": true
+      "type": ["string", "null"]
     },
     "aliases": {
       "type": "array",
       "items": { "type": "string" }
     },
     "sector": {
-      "type": "string",
-      "description": "military, intelligence, nuclear, political, industrial, etc."
+      "type": ["string", "null"],
+      "description": "military, nuclear, political, academic, etc."
     },
     "rank_or_grade": {
-      "type": "string",
-      "description": "Rank, grade, or seniority marker",
-      "nullable": true
+      "type": ["string", "null"]
     },
     "service_or_agency": {
-      "type": "string",
-      "description": "Service, ministry, agency, or organization",
-      "nullable": true
+      "type": ["string", "null"]
     },
     "current_position": {
-      "type": "string",
-      "nullable": true
+      "type": ["string", "null"]
     },
     "current_org_id": {
-      "type": "string",
-      "nullable": true
+      "type": ["string", "null"]
     },
     "career_history": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["org_id", "position", "start_year"],
         "properties": {
-          "org_id": { "type": "string" },
-          "position": { "type": "string" },
-          "start_year": { "type": "integer" },
+          "org_id": { "type": ["string", "null"] },
+          "position": { "type": ["string", "null"] },
+          "start_year": { "type": ["integer", "null"] },
           "end_year": { "type": ["integer", "null"] }
-        }
+        },
+        "required": ["position"]
       }
     },
     "academic_profiles": {
       "type": "object",
-      "properties": {
-        "cnki": { "type": ["string", "null"] },
-        "wos": { "type": ["string", "null"] },
-        "orcid": { "type": ["string", "null"] },
-        "ssrn": { "type": ["string", "null"] },
-        "researchgate": { "type": ["string", "null"] },
-        "scopus": { "type": ["string", "null"] },
-        "patents": {
-          "type": "array",
-          "items": { "type": "string" }
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "institution": { "type": ["string", "null"] },
+          "degree": { "type": ["string", "null"] },
+          "year": { "type": ["integer", "null"] }
         }
-      },
-      "additionalProperties": true
+      }
     },
     "thematic_keywords": {
       "type": "array",
@@ -79,33 +86,31 @@
     },
     "political_alignment_score": {
       "type": "number",
-      "minimum": 0.0,
-      "maximum": 1.0
+      "minimum": 0,
+      "maximum": 1
     },
     "technical_expertise_score": {
       "type": "number",
-      "minimum": 0.0,
-      "maximum": 1.0
+      "minimum": 0,
+      "maximum": 1
     },
     "doctrinal_influence_score": {
       "type": "number",
-      "minimum": 0.0,
-      "maximum": 1.0
+      "minimum": 0,
+      "maximum": 1
     },
     "promotion_velocity_score": {
       "type": "number",
-      "minimum": 0.0,
-      "maximum": 1.0
+      "minimum": 0,
+      "maximum": 1
     },
     "purge_or_arrest_risk_score": {
       "type": "number",
-      "minimum": 0.0,
-      "maximum": 1.0
+      "minimum": 0,
+      "maximum": 1
     },
     "notes": {
-      "type": "string",
-      "nullable": true
+      "type": ["string", "null"]
     }
-  },
-  "additionalProperties": false
+  }
 }

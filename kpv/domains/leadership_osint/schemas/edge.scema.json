@@ -1,28 +1,40 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Leadership Edge",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KPV Edge Schema",
   "type": "object",
-  "required": ["source", "target", "type"],
+  "required": [
+    "id",
+    "source_id",
+    "target_id",
+    "relationship_type",
+    "weight",
+    "notes"
+  ],
   "properties": {
-    "source": { "type": "string" },
-    "target": { "type": "string" },
-    "type": {
+    "id": {
       "type": "string",
-      "description": "commands, reports_to, patronage, coauthor, cohort, business_tie, etc."
+      "description": "Unique edge identifier"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "ID of the source node (person or organization)"
+    },
+    "target_id": {
+      "type": "string",
+      "description": "ID of the target node (person or organization)"
+    },
+    "relationship_type": {
+      "type": "string",
+      "description": "e.g., supervises, reports_to, affiliated_with, commands, collaborates_with"
     },
     "weight": {
       "type": "number",
-      "minimum": 0.0,
-      "maximum": 1.0
-    },
-    "evidence": {
-      "type": "array",
-      "items": { "type": "string" }
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Strength of relationship (0–1)"
     },
     "notes": {
-      "type": "string",
-      "nullable": true
+      "type": ["string", "null"]
     }
-  },
-  "additionalProperties": false
+  }
 }

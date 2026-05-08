@@ -1,49 +1,69 @@
-import difflib
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, Optional
+from .logger import get_logger
 
 
 class IdentityResolver:
     """
-    Resolve identities across OSINT sources using fuzzy matching,
-    romanization variants, and contextual clues.
+    Handles identity matching and merging for KPV ingestion.
+    Matching strategy:
+      - Exact match on name_latin
+      - Fallback: exact match on name_native
+      - Future: fuzzy matching, alias matching, org/role matching
     """
 
-    def __init__(self, threshold: float = 0.80):
-        self.threshold = threshold
+    def __init__(self):
+        self.logger = get_logger("KPV.Identity")
 
+    # ------------------------------------------------------------
+    # Person matching
+    # ------------------------------------------------------------
     def match_person(
         self,
         new_person: Dict[str, Any],
-        existing_persons: List[Dict[str, Any]]
+        existing_persons: list
     ) -> Optional[Dict[str, Any]]:
-        """
-        Attempt to match a new person record to an existing one.
-        """
 
-        candidates = []
+        name_latin = new_person.get("name_latin")
+        name_native = new_person.get("name_native")
 
-        new_name = new_person.get("name_native") or new_person.get("name_latin")
-
+        # Exact match on Latin name
         for person in existing_persons:
-            existing_name = person.get("name_native") or person.get("name_latin")
+            if person.get("name_latin") == name_latin:
+                self.logger.info(f"Identity match (latin): {name_latin}")
+                return person
 
-            score = difflib.SequenceMatcher(None, new_name, existing_name).ratio()
+        # Exact match on native name
+        for person in existing_persons:
+            if person.get("name_native") == name_native:
+                self.logger.info(f"Identity match (native): {name_native}")
+                return person
 
-            if score >= self.threshold:
-                candidates.append((score, person))
+        self.logger.info(f"No identity match for: {name_latin or name_native}")
+        return None
 
-        if not candidates:
-            return None
+    # ------------------------------------------------------------
+    # Merge logic
+    # ------------------------------------------------------------
+    def merge_person(
+        self,
+        existing: Dict[str, Any],
+        new: Dict[str, Any]
+    ) -> Dict[str, Any]:
 
-        # return best match
-        return max(candidates, key=lambda x: x[0])[1]
+        merged = existing.copy()
 
-    def merge_person(self, old: Dict[str, Any], new: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Merge fields from new into old, preferring new when non-null.
-        """
-        merged = old.copy()
-        for k, v in new.items():
-            if v not in (None, "", [], {}):
-                merged[k] = v
+        for key, value in new.items():
+            if value is None:
+                continue
+
+            # Merge lists (e.g., aliases, keywords)
+            if isinstance(value, list):
+                old_list = merged.get(key, [])
+                merged[key] = list({*old_list, *value})
+                continue
+
+            # Overwrite scalar fields
+            merged[key] = value
+
+        self.logger.info(f"Merged person record: {merged.get('id')}")
         return merged

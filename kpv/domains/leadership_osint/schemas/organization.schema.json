@@ -1,45 +1,44 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Leadership Organization",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KPV Organization Schema",
   "type": "object",
-  "required": ["id", "country_code", "name"],
+  "required": [
+    "id",
+    "country_code",
+    "name",
+    "type",
+    "parent_org_id",
+    "thematic_keywords",
+    "notes"
+  ],
   "properties": {
-    "id": { "type": "string" },
-    "country_code": { "type": "string" },
-    "name": { "type": "string" },
-    "name_native": {
+    "id": {
       "type": "string",
-      "nullable": true
+      "description": "Unique organization identifier"
+    },
+    "country_code": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}$",
+      "description": "ISO-style country code (CN, RU, IR, KP)"
+    },
+    "name": {
+      "type": ["string", "null"],
+      "description": "Official organization name"
     },
     "type": {
-      "type": "string",
-      "description": "e.g., general staff, ministry, service HQ, nuclear lab, SOE"
-    },
-    "sector": {
-      "type": "string",
-      "description": "military, intelligence, nuclear, industrial, etc.",
-      "nullable": true
-    },
-    "mission": {
-      "type": "string",
-      "nullable": true
+      "type": ["string", "null"],
+      "description": "military, political, academic, industrial, intelligence, etc."
     },
     "parent_org_id": {
-      "type": "string",
-      "nullable": true
+      "type": ["string", "null"],
+      "description": "ID of parent organization, if applicable"
     },
-    "child_org_ids": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "key_personnel_ids": {
+    "thematic_keywords": {
       "type": "array",
       "items": { "type": "string" }
     },
     "notes": {
-      "type": "string",
-      "nullable": true
+      "type": ["string", "null"]
     }
-  },
-  "additionalProperties": false
+  }
 }

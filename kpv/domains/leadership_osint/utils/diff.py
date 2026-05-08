@@ -1,42 +1,61 @@
 from typing import Dict, Any, List
+from .logger import get_logger
 
 
 def compute_diff(old: Dict[str, Any], new: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Compute differences between old and new datasets.
-    Returns a structured diff dictionary.
+    Computes a structured diff between two KPV datasets.
+    Tracks:
+      - added
+      - removed
+      - modified
     """
 
-    return {
-        "persons": _diff_list(old.get("persons", []), new.get("persons", []), key="id"),
-        "organizations": _diff_list(old.get("organizations", []), new.get("organizations", []), key="id"),
-        "edges": _diff_list(old.get("edges", []), new.get("edges", []), key=lambda e: (e["source"], e["target"], e["type"])),
+    logger = get_logger("KPV.Diff")
+
+    diff = {
+        "persons": _diff_list(old.get("persons", []), new.get("persons", []), "id", logger),
+        "organizations": _diff_list(old.get("organizations", []), new.get("organizations", []), "id", logger),
+        "edges": _diff_list(old.get("edges", []), new.get("edges", []), "id", logger),
     }
 
+    logger.info("Diff computation complete")
+    return diff
 
-def _diff_list(old_list: List[Any], new_list: List[Any], key):
-    """
-    Compute added, removed, and modified items in a list of dicts.
-    """
 
-    if isinstance(key, str):
-        key_fn = lambda x: x[key]
-    else:
-        key_fn = key
+def _diff_list(
+    old_list: List[Dict[str, Any]],
+    new_list: List[Dict[str, Any]],
+    key: str,
+    logger
+) -> Dict[str, List[Dict[str, Any]]]:
 
-    old_map = {key_fn(item): item for item in old_list}
-    new_map = {key_fn(item): item for item in new_list}
+    old_map = {item[key]: item for item in old_list if key in item}
+    new_map = {item[key]: item for item in new_list if key in item}
 
-    added = [new_map[k] for k in new_map.keys() - old_map.keys()]
-    removed = [old_map[k] for k in old_map.keys() - new_map.keys()]
-
+    added = []
+    removed = []
     modified = []
-    for k in old_map.keys() & new_map.keys():
-        if old_map[k] != new_map[k]:
-            modified.append({"old": old_map[k], "new": new_map[k]})
+
+    # Detect added + modified
+    for new_id, new_item in new_map.items():
+        if new_id not in old_map:
+            added.append(new_item)
+            logger.info(f"Added: {new_id}")
+        else:
+            old_item = old_map[new_id]
+            if new_item != old_item:
+                modified.append({"old": old_item, "new": new_item})
+                logger.info(f"Modified: {new_id}")
+
+    # Detect removed
+    for old_id, old_item in old_map.items():
+        if old_id not in new_map:
+            removed.append(old_item)
+            logger.info(f"Removed: {old_id}")
 
     return {
         "added": added,
         "removed": removed,
-        "modified": modified
+        "modified": modified,
     }

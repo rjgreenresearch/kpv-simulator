@@ -1,187 +1,272 @@
-# KPVS Person-Centric Layer — Drop-In Extension Pack (v4)
+# KPVS Person-Centric Layer — Complete Pack (v6)
 
-Adds a person layer + person-centric scenarios + structured aliases +
-faction-purge scenario to KPVS without modifying any of the 2.0 codebase.
+Final release. Complete person-centric extension of KPVS without modifying
+any of the 2.0 codebase. All planned PRs delivered.
 
-## What's in this v4 pack
+## Status
+
+- ✅ PR #1 — Person, Effective KPCI, PRC taxonomy
+- ✅ PR #1.5 — Structured Alias dataclass + name matching utilities
+- ✅ PR #2 — Person-aware adversarial targeting
+- ✅ PR #3 — Graph-aware cascade propagation
+- ✅ PR #4 — Faction purge scenario
+- ✅ PR #5 — Entity resolver with calibration
+
+**Test count: 149/149 passing across 6 test files.**
+
+## Architecture summary
 
 ```
-kpvs/persons.py                          # Person + Alias + RoleAssignment + factions     (PR #1+1.5)
-kpvs/effective_kpci.py                   # Effective KPCI derivation                       (PR #1)
-kpvs/name_matching.py                    # Cross-script fuzzy matching utilities           (PR #1.5)
-kpvs/person_simulator.py                 # PersonAwareSimulator + 2 scenarios              (PR #2)
-kpvs/faction_purge.py                    # FactionAwareSimulator + faction-purge scenario  (PR #4 NEW)
-kpvs/intelligence/role_mapper.py         # PRC taxonomy + graph→profile pipeline           (PR #1)
-tests/test_persons.py                    # Person, Effective KPCI tests                    (PR #1)
-tests/test_person_simulator.py           # Simulator scenario tests                        (PR #2)
-tests/test_name_matching.py              # Alias, normalization, find_person tests         (PR #1.5)
-tests/test_faction_purge.py              # Faction purge tests                             (PR #4 NEW)
-examples/prc_person_centric_demo.py      # Effective KPCI walkthrough                      (PR #1)
-examples/prc_adversarial_gap_demo.py     # Person-level adversarial gap                    (PR #2)
-examples/name_matching_demo.py           # Cross-script fuzzy resolution                   (PR #1.5)
-examples/faction_purge_demo.py           # Wagner-Surovikin synthetic case study           (PR #4 NEW)
+                      ┌─────────────────────────┐
+                      │    KPVSimulator (2.0)    │  unchanged
+                      └─────────────┬───────────┘
+                                    ↓ (inherits)
+                      ┌─────────────────────────┐
+                      │   PersonAwareSimulator   │  PR #2
+                      │  • random attrition      │
+                      │  • adversarial targeting │
+                      └─────────────┬───────────┘
+                                    ↓
+                      ┌─────────────────────────┐
+                      │  FactionAwareSimulator   │  PR #4
+                      │  • faction purge         │
+                      └─────────────┬───────────┘
+                                    ↓
+                      ┌─────────────────────────┐
+                      │   GraphAwareSimulator    │  PR #3
+                      │  • graph cascade         │
+                      └─────────────────────────┘
+
+  Data layer:                  Cross-cutting:
+  ─────────────                ────────────────
+  Person (PR #1)               EntityResolver (PR #5)
+  Alias (PR #1.5)              name_matching (PR #1.5)
+  RoleAssignment (PR #1)       OSINTGraph (PR #3)
+  factions tag (PR #4)
 ```
 
-**Test count: 136/136 passing.**
+Use `GraphAwareSimulator` as the drop-in replacement for everything —
+it inherits all prior scenarios.
 
-## What PR #4 adds
-
-A new Monte Carlo scenario that operates on coherent leadership subgroups:
+## Public API (kpvs/__init__.py)
 
 ```python
-from kpvs.faction_purge import FactionAwareSimulator, run_faction_vs_random
+from kpvs import (
+    # Data model
+    Person, Alias, RoleAssignment,
+    roles_held_by, persons_in_role, multi_hat_persons,
 
-sim = FactionAwareSimulator(organization, persons, assignments, seed=42)
+    # Effective KPCI
+    effective_kpci, effective_tier, person_premium,
+    tenure_factor, continuity_loss,
 
-# Deterministic: remove ALL members of a tagged faction
-result = sim.scenario_faction_purge(faction_tag="wagner-aligned")
+    # Name matching
+    normalize, match_score, find_person, find_persons_above,
+    transliteration_variants,
 
-# Stochastic: deterministic core + secondary loss probability
-result = sim.scenario_faction_purge(
-    faction_tag="wagner-aligned",
-    secondary_loss_p=0.15,
-    n_iterations=3000,
+    # Simulators
+    PersonAwareSimulator, PersonScenarioResult, person_adversarial_gap,
+    FactionAwareSimulator, FactionPurgeResult,
+        resolve_faction_members, faction_concentration_premium,
+        run_faction_vs_random,
+    GraphAwareSimulator, CascadeResult, cascade_vs_seed_only,
+
+    # Graph
+    OSINTGraph, GraphEdge, empty_graph, auto_apex_edges,
+
+    # Entity resolver
+    EntityResolver, ResolveResult, MergeCandidate, CalibrationReport,
 )
-
-# Callable filter for complex membership criteria
-result = sim.scenario_faction_purge(
-    faction_filter=lambda p: p.tenure_months >= 60 and "GRU" in p.notes,
-)
-
-# Compare to equivalent-N random attrition
-compare = run_faction_vs_random(sim, faction_tag="wagner-aligned",
-                                  n_iterations=2000)
-# {'faction': FactionPurgeResult, 'random': PersonScenarioResult,
-#  'premium': {'capability_premium_pp': +9.7, ...}}
 ```
 
-### Faction membership representation
+## Files in this pack
 
-Persons carry a `factions: list[str]` field (added in this PR, backward
-compatible — defaults to empty list). A person can hold multiple faction
-tags simultaneously:
+```
+kpvs/
+├── __init__.py                          # Public API exports         (PR #5)
+├── persons.py                           # Person + Alias + Assignment
+├── effective_kpci.py                    # Derivation + diagnostics
+├── name_matching.py                     # Cross-script fuzzy matching
+├── person_simulator.py                  # PersonAwareSimulator
+├── faction_purge.py                     # FactionAwareSimulator
+├── osint_graph.py                       # OSINTGraph + auto_apex_edges
+├── cascade_simulator.py                 # GraphAwareSimulator
+├── entity_resolver.py                   # EntityResolver               (PR #5)
+└── intelligence/
+    └── role_mapper.py                   # PRC taxonomy + graph→profile
+
+tests/                       (149 tests total)
+├── test_persons.py                      # 24 tests
+├── test_person_simulator.py             # 12 tests
+├── test_name_matching.py                # 35 tests
+├── test_faction_purge.py                # 23 tests
+├── test_cascade.py                      # 27 tests
+├── test_entity_resolver.py              # 27 tests                    (PR #5)
+└── test_integration.py                  # 1 end-to-end smoke test     (PR #5)
+
+examples/
+├── prc_person_centric_demo.py           # Effective KPCI walkthrough
+├── prc_adversarial_gap_demo.py          # Person-level adversarial gap
+├── name_matching_demo.py                # Cross-script fuzzy resolution
+├── faction_purge_demo.py                # Wagner-Surovikin synthetic case
+├── cascade_demo.py                      # PRC graph cascade synthetic
+└── entity_resolver_demo.py              # Bulk OSINT dedup workflow   (PR #5)
+```
+
+## What PR #5 delivers
+
+### Single-query resolution with role context
 
 ```python
-Person(id="P-RU-005", name="...", country="RU",
-       factions=["wagner-aligned", "syria-veteran", "surovikin-line"])
+from kpvs import EntityResolver
+
+resolver = EntityResolver(
+    population=canonical_persons,        # dict[id, Person]
+    role_assignments=assignments,         # for role-context disambiguation
+    roles=role_taxonomy,                  # for role title/institution lookup
+    graph=osint_graph,                    # optional — graph-evidence boost
+    threshold=0.85,
+)
+
+# Three flavors of role context (any combination)
+result = resolver.resolve(
+    "Wang",                               # ambiguous name
+    role_hint="Foreign Affairs",         # free-text → token containment
+    role_id="CN-PB-FOREIGN",             # exact role ID (highest precision)
+    institution="CCP Central Foreign Affairs Commission",
+)
+# → Wang Yi, score boosted via role context match
 ```
 
-Multi-faction persons appear in every relevant purge scenario — natural
-modeling of overlapping patronage networks.
+### Bulk merge candidate generation
 
-### Concentration premium — sign matters
-
-The key output metric is the **concentration premium**: how much worse
-a coherent faction purge is than randomly losing the same number of
-persons. The sign carries analytical meaning:
-
-| Premium  | Interpretation                                       |
-|----------|------------------------------------------------------|
-| Positive | Faction concentrated in HIGH-KPCI / high-weight roles. Coherent purge worse than scattered loss. → **Critical single-point-of-failure** |
-| ~Zero    | Faction is a representative cross-section of the org. Coherent purge ≈ random equivalent. |
-| Negative | Faction holds peripheral roles. Coherent purge LESS damaging than random — random can stochastically hit apex roles the faction doesn't hold. → **Faction is not regime-critical** |
-
-This is operationally meaningful: a positive-premium faction is where
-resilience investment pays the highest dividend; a negative-premium
-faction is operationally cosmetic to target.
-
-### Demo output (Wagner-Surovikin synthetic case)
-
-```
-regime-apex           size= 2  roles= 2  cap=77.3%  premium=  +9.7 pp ← critical
-wagner-aligned        size= 6  roles= 7  cap=65.5%  premium=  -5.0 pp
-mod-careerist         size= 6  roles= 6  cap=60.2%  premium=  -0.1 pp
-syria-veteran         size= 3  roles= 4  cap=80.2%  premium=  -0.0 pp
-surovikin-line        size= 2  roles= 3  cap=85.9%  premium=  +0.9 pp
-gru-veteran           size= 2  roles= 2  cap=89.8%  premium=  -3.0 pp
+```python
+candidates = resolver.find_merge_candidates(
+    incoming_persons,                     # list[Person] from scrapers
+    threshold=0.85,
+    include_role_context=True,
+)
+# → list[MergeCandidate(incoming_id, canonical_id, score, evidence)]
 ```
 
-Matches historical reality: the Wagner-Surovikin June 2023 events
-disrupted Russian theater command without threatening regime continuity,
-because the regime-apex faction was untouched. The simulator captures
-this asymmetry as a sign difference in concentration premium.
+### Bulk graph deduplication
 
-### Scenario diagnostics
+```python
+deduped_graph = resolver.deduplicate_graph(
+    osint_graph,
+    candidates,                           # approved merges (after analyst review)
+    merge_source="entity-resolver",
+)
+# - Person nodes consolidated to canonical IDs
+# - Edges rewritten + deduplicated
+# - Self-loops from rewrites removed
+# - person_to_orgs and role_to_org updated
+# - Surface strings preserved as Aliases on canonical Person
+```
 
-Beyond mean capability remaining, `FactionPurgeResult` reports:
-- `faction_size` and resolved `member_ids`
-- `direct_roles_disabled` and `multi_hat_amplification` (extra leverage
-  via multi-hat persons inside the faction)
-- `direct_tacit_shock` (aggregate TK lost)
-- `concentrated_failures` (roles where occupant has ≤1 substitute —
-  unreplaceable single-points-of-failure inside the faction)
-- `countries_affected` and `cross_org_amplifier` (for transnational
-  factions like SCO-bloc, IRGC-Hezbollah, etc.)
-- Stochastic spillover: `mean_secondary_loss`, p05/p50/p95 distribution
+### Calibration against ground truth
 
-## Where to place files in your existing repo
+```python
+report = resolver.calibrate(
+    ground_truth=[
+        ("Xi Jinping", "P-CN-XI"),
+        ("习近平", "P-CN-XI"),
+        ("Hsi Chinping", "P-CN-XI"),     # Wade-Giles
+        ("Си Цзиньпин", "P-CN-XI"),       # Russian source
+        ("John Smith", None),             # should NOT match
+        # ...
+    ],
+    thresholds=[0.50, 0.55, ..., 1.00],
+)
+# → CalibrationReport(threshold_table, best_f1_threshold, best_f1)
+```
+
+Demo output (13 ground-truth pairs against PRC + RU canonical population):
 
 ```
-kpv-simulator/
-├── kpvs/
-│   ├── persons.py                       (factions field added)
-│   ├── faction_purge.py                 ← NEW PR #4
-│   ├── name_matching.py                 (unchanged from PR #1.5)
-│   ├── effective_kpci.py                (unchanged from PR #1)
-│   ├── person_simulator.py              (unchanged from PR #2)
-│   ├── models.py                        (unchanged)
-│   ├── simulator.py                     (unchanged)
-│   └── intelligence/
-│       └── role_mapper.py               (unchanged from PR #1)
-├── tests/
-│   └── test_faction_purge.py            ← NEW PR #4 — 23 tests
-└── examples/
-    └── faction_purge_demo.py            ← NEW PR #4
+ Thresh  Precision    Recall      F1   TP/FP/FN/TN
+────────────────────────────────────────────────────
+   0.50      1.000     0.909   0.952   10/0/1/2     ← best F1
+   0.85      1.000     0.727   0.842    8/0/3/2     ← shipped default
+   1.00      1.000     0.545   0.706    6/0/5/2     ← exact-match only
 ```
+
+Perfect precision across all thresholds (no false positives in this set);
+recall drops as fuzzy variants like "Hsi Chinping" and "Си Цзиньпин"
+fall below threshold. For adversarial intel work, the 0.85 default's
+trade-off (perfect precision, ~73% recall) is appropriate — false
+merges contaminate downstream analytics far more than missed merges.
+
+## Dangling items addressed in this pack
+
+1. **`kpvs/__init__.py` clean exports** — was empty; now provides the
+   complete public API surface. Downstream code can `from kpvs import …`.
+
+2. **`auto_apex_edges()` helper** — the cascade demo flagged that
+   membership alone doesn't trigger Person→Org cascade. Helper auto-
+   generates `apex_loss` edges for any person whose effective KPCI
+   meets a threshold (default Tier-1, ≥10). Reduces boilerplate when
+   building real OSINT graphs.
+
+3. **Integration smoke test** — `tests/test_integration.py` exercises
+   the full chain: Person → Effective KPCI → Aliases → Person
+   simulator → Faction simulator → Graph cascade → Entity resolver.
+   Verifies all six modules compose correctly via the unified imports.
 
 ## Run
 
 ```bash
-python -m pytest tests/ -v                       # 136 tests
-python examples/faction_purge_demo.py            # Wagner case study
+python -m pytest tests/ -v                       # 149 tests, ~1s
+python examples/entity_resolver_demo.py          # PR #5 workflow demo
 ```
 
-## Architectural commitments preserved
+## Architectural commitments preserved across all PRs
 
-1. **Existing simulator.py is unchanged.** `FactionAwareSimulator` extends
-   `PersonAwareSimulator` via inheritance — drop-in replacement.
-2. **Role-level KPCI methodology unchanged.**
-3. **Backward compatible.** Existing Person data without `factions` field
-   gets empty list default. All prior tests pass.
-4. **Inheritance chain.** `FactionAwareSimulator` inherits all
-   `PersonAwareSimulator` methods — random attrition, targeted attrition,
-   target-value ranking all still work on the new class.
+1. **Existing simulator.py is unchanged.** All new scenarios live in
+   the inheritance chain rooted at PersonAwareSimulator.
+2. **Role-level KPCI methodology unchanged.** ST + DR + AO and tier
+   thresholds (10 / 7 / 4) remain the published doctrine. Effective
+   KPCI is derived, never stored. Floor invariant guarantees
+   `effective ≥ structural`.
+3. **Backward compatible at every layer.**
+   - `aliases=["foo"]` and `aliases=[Alias(...)]` and
+     `aliases=[{"text": "foo"}]` all work.
+   - GraphAwareSimulator can be constructed without a graph.
+   - EntityResolver works with just population (no roles, no graph).
+4. **NetworkX is optional.** Used opportunistically for graph metrics;
+   degree-only fallback when not available.
+5. **Reproducibility.** Every Monte Carlo scenario accepts a seed.
+   Tests verify identical seeds produce identical output.
 
-## What's NOT in this pack yet
+## What's NOT in this pack (intentional out-of-scope)
 
-### PR #3: Graph-aware cascade propagation
-Cascade through OSINT graph edges in addition to `critical_dependencies`.
-**Still needs your input** on the OSINT graph schema (edge types, per-
-country vs unified, person-only vs person+org propagation) before I write code.
+- ML-based name matching (transformer embeddings, BERT-NER)
+- External knowledge-base lookups (Wikipedia, Wikidata)
+- Active learning loops for resolver
+- Cross-graph merging across multiple OSINTGraph instances
+- Visualization (recommend external tools — Gephi, Cytoscape)
+- Time-series analysis (snapshots over multiple dates)
 
-### PR #5: Entity resolver
-Auto-discover aliases from graph context, calibrate confidence against
-ground-truth pairs, bulk graph deduplication. Builds on PR #1.5
-infrastructure.
+These are appropriate v2 features when there's empirical demand and
+calibration data to inform their design.
 
-## Tunable parameters
+## Calibration suggestions for production use
 
-In `kpvs/faction_purge.py`:
+Real-world thresholds and edge weights need calibration against your
+specific OSINT pipeline. Sensible historical-event ground-truth datasets:
 
-```python
-# Inside scenario_faction_purge:
-secondary_loss_p ∈ [0, 1]   # probability of independent non-faction loss
-                            # 0 = deterministic (default)
-                            # 0.05–0.20 = realistic post-purge turbulence
-                            # >0.30 = regime collapse scenario
-n_iterations                # ignored if secondary_loss_p == 0
-```
+| Event                                  | Tests                              |
+|----------------------------------------|------------------------------------|
+| Bo Xilai 2012 → Zhou Yongkang isolation| CCP `factional` + `patron` edges  |
+| Soleimani Jan 2020 → IRGC-QF cohort   | `reports_to` + `mentor`            |
+| Wagner-Surovikin June 2023            | `patron` + `co_event`              |
+| Jang Song-thaek Dec 2013 (DPRK)       | `family` + `reports_to`            |
+| Hu Jintao Oct 2022 PB removal         | Single-decap continuity loss      |
 
-## Calibration suggestion
+A calibration paper using these events would let your published
+methodology defend its concentration premium and cascade premium
+numbers as empirically grounded rather than purely heuristic.
 
-The Stalin NKVD purges (1936-1938), Saudi 2017 anti-corruption detentions,
-Xi's Bo Xilai network purge, and Kim Jong Un's Jang Song-thaek purge all
-provide historical concentration-premium data points if reconstructed
-from open-source biographical reporting. A future calibration paper
-could ground-truth the simulator's concentration premium against these
-events.
+## Version
+
+`__version__ = "0.5.0"` — corresponds to PRs #1 + #1.5 + #2 + #3 + #4 + #5.

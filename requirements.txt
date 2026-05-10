@@ -1,7 +1,27 @@
+requests>=2.28.0
+beautifulsoup4>=4.11.0
+googletrans==4.0.0rc1
+transliterate>=1.10.2
+pypinyin>=0.47.0
+lxml>=4.9.0
+selenium>=4.8.0
+webdriver-manager>=3.8.0
+pandas>=1.5.0
+numpy>=1.21.0
 
-# Web interface dependencies
-fastapi>=0.100
-uvicorn>=0.23
-jinja2>=3.1
-python-multipart>=0.0.6
-httpx>=0.24          # for FastAPI TestClient
+# Academic database integration
+scholarly>=1.7.0
+orcid-python>=0.4.0
+habanero>=1.2.0
+xmltodict>=0.13.0
+networkx>=2.8.0
+
+# Enhanced data processing
+python-levenshtein>=0.20.0
+fuzzywuzzy>=0.18.0
+python-Levenshtein>=0.20.0
+
+# Optional advanced features
+selenium-wire>=5.1.0
+undetected-chromedriver>=3.5.0
+fake-useragent>=1.4.0

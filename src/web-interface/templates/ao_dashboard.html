@@ -1,0 +1,397 @@
+<!-- AO Enhancement Dashboard Template -->
+<!-- templates/ao_enhancement/dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AO Value Enhancement Dashboard - KVP Simulator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-900 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-xl font-bold">KVP Simulator</h1>
+                    <span class="text-blue-200">AO Enhancement Dashboard</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="/kvp-simulator" class="hover:text-blue-200">Main Simulator</a>
+                    <a href="/ao-enhancement/targets" class="hover:text-blue-200">Target Management</a>
+                    <a href="/ao-enhancement/network" class="hover:text-blue-200">Network Analysis</a>
+                    <a href="/ao-enhancement/reports" class="hover:text-blue-200">Reports</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Status Header -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">AO Value Enhancement System</h2>
+                    <p class="text-gray-600 mt-2">Reducing opacity barriers through academic cross-referencing</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="systemStatus" class="flex items-center">
+                        <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                        <span class="text-sm text-gray-700">System Active</span>
+                    </div>
+                    <button onclick="initializeSystem()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                        Initialize Enhancement
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Metrics Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Targets -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Total Targets</p>
+                        <p id="totalTargets" class="text-2xl font-semibold text-gray-900">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Academic Enhanced -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Academic Enhanced</p>
+                        <p id="academicEnhanced" class="text-2xl font-semibold text-gray-900">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Avg Opacity Reduction -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Opacity Reduction</p>
+                        <p id="opacityReduction" class="text-2xl font-semibold text-gray-900">-%</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- High Priority Targets -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">High Priority</p>
+                        <p id="highPriorityTargets" class="text-2xl font-semibold text-gray-900">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts and Analysis -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- AO Value Distribution Chart -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">AO Value Distribution</h3>
+                <canvas id="aoValueChart" width="400" height="300"></canvas>
+            </div>
+
+            <!-- Opacity Reduction Timeline -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Enhancement Progress</h3>
+                <canvas id="enhancementChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+
+        <!-- Top Priority Targets Table -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Top Priority Targets</h3>
+                <button onclick="refreshTargets()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">
+                    Refresh
+                </button>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Organization</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority Score</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">AO Value</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Opacity Reduction</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Academic</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="targetTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Table content will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Enhancement Activity</h3>
+            <div id="activityFeed" class="space-y-3">
+                <!-- Activity items will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Global variables
+        let aoData = null;
+        let enhancementChartInstance = null;
+        let aoValueChartInstance = null;
+
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            setupCharts();
+            setupRefreshInterval();
+        });
+
+        // Load dashboard data from API
+        async function loadDashboardData() {
+            try {
+                const [statusResponse, entitiesResponse, opacityResponse] = await Promise.all([
+                    axios.get('/api/ao/status'),
+                    axios.get('/api/ao/entities'),
+                    axios.get('/api/ao/opacity')
+                ]);
+
+                updateMetrics(statusResponse.data, entitiesResponse.data, opacityResponse.data);
+                updateTargetsTable(entitiesResponse.data);
+                updateCharts(entitiesResponse.data, opacityResponse.data);
+
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+                showError('Failed to load dashboard data');
+            }
+        }
+
+        // Update key metrics
+        function updateMetrics(status, entities, opacity) {
+            document.getElementById('totalTargets').textContent = entities.total_entities || 0;
+            document.getElementById('academicEnhanced').textContent = 
+                entities.entities?.filter(e => e.academic_enhanced).length || 0;
+            document.getElementById('opacityReduction').textContent = 
+                `${Math.round(opacity.average_opacity_reduction || 0)}%`;
+            document.getElementById('highPriorityTargets').textContent = 
+                opacity.high_reduction_targets || 0;
+        }
+
+        // Update targets table
+        function updateTargetsTable(entitiesData) {
+            const tableBody = document.getElementById('targetTableBody');
+            tableBody.innerHTML = '';
+
+            if (!entitiesData.entities) return;
+
+            // Sort by AO value and take top 10
+            const topTargets = entitiesData.entities
+                .sort((a, b) => (b.ao_metrics?.overall_ao_value || 0) - (a.ao_metrics?.overall_ao_value || 0))
+                .slice(0, 10);
+
+            topTargets.forEach(target => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="text-sm font-medium text-gray-900">${target.name}</div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${target.organization}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                               ${getPriorityClass(target.ao_metrics?.overall_ao_value || 0)}">
+                            ${(target.ao_metrics?.overall_ao_value || 0).toFixed(3)}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${(target.ao_metrics?.overall_ao_value || 0).toFixed(3)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${target.opacity_reduction || '-'}%
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${target.academic_enhanced ? 
+                            '<span class="text-green-600">✓ Enhanced</span>' : 
+                            '<span class="text-gray-400">Basic</span>'}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="viewTarget('${target.entity_id}')" 
+                                class="text-blue-600 hover:text-blue-900">View</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Get CSS class for priority score
+        function getPriorityClass(score) {
+            if (score > 0.7) return 'bg-red-100 text-red-800';
+            if (score > 0.5) return 'bg-yellow-100 text-yellow-800';
+            return 'bg-green-100 text-green-800';
+        }
+
+        // Setup charts
+        function setupCharts() {
+            // AO Value Distribution Chart
+            const aoCtx = document.getElementById('aoValueChart').getContext('2d');
+            aoValueChartInstance = new Chart(aoCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['High AO (>0.7)', 'Medium AO (0.5-0.7)', 'Low AO (<0.5)'],
+                    datasets: [{
+                        data: [0, 0, 0],
+                        backgroundColor: ['#EF4444', '#F59E0B', '#10B981'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Enhancement Progress Chart
+            const enhancementCtx = document.getElementById('enhancementChart').getContext('2d');
+            enhancementChartInstance = new Chart(enhancementCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Opacity Reduction %',
+                        data: [],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update charts with data
+        function updateCharts(entitiesData, opacityData) {
+            if (!entitiesData.entities) return;
+
+            // Update AO Value Distribution
+            const aoValues = entitiesData.entities.map(e => e.ao_metrics?.overall_ao_value || 0);
+            const highAO = aoValues.filter(v => v > 0.7).length;
+            const mediumAO = aoValues.filter(v => v >= 0.5 && v <= 0.7).length;
+            const lowAO = aoValues.filter(v => v < 0.5).length;
+
+            aoValueChartInstance.data.datasets[0].data = [highAO, mediumAO, lowAO];
+            aoValueChartInstance.update();
+
+            // Update Enhancement Progress (sample data for demo)
+            const progressData = Array.from({length: 7}, (_, i) => {
+                return Math.min(100, 20 + (i * 12) + Math.random() * 10);
+            });
+            const progressLabels = Array.from({length: 7}, (_, i) => {
+                const date = new Date();
+                date.setDate(date.getDate() - (6 - i));
+                return date.toLocaleDateString();
+            });
+
+            enhancementChartInstance.data.labels = progressLabels;
+            enhancementChartInstance.data.datasets[0].data = progressData;
+            enhancementChartInstance.update();
+        }
+
+        // Initialize AO enhancement system
+        async function initializeSystem() {
+            try {
+                const response = await axios.post('/api/ao/initialize', {
+                    enable_academic_search: true,
+                    kvp_assessment_mode: true,
+                    opacity_focus: true
+                });
+
+                if (response.data.status === 'success') {
+                    showSuccess('AO enhancement system initialized successfully');
+                    loadDashboardData();
+                }
+            } catch (error) {
+                console.error('Failed to initialize system:', error);
+                showError('Failed to initialize AO enhancement system');
+            }
+        }
+
+        // Refresh targets data
+        async function refreshTargets() {
+            await loadDashboardData();
+            showSuccess('Target data refreshed');
+        }
+
+        // View target details
+        function viewTarget(targetId) {
+            window.location.href = `/ao-enhancement/targets?view=${targetId}`;
+        }
+
+        // Setup auto-refresh
+        function setupRefreshInterval() {
+            setInterval(loadDashboardData, 30000); // Refresh every 30 seconds
+        }
+
+        // Utility functions
+        function showSuccess(message) {
+            // Implement success notification
+            console.log('Success:', message);
+        }
+
+        function showError(message) {
+            // Implement error notification
+            console.error('Error:', message);
+        }
+    </script>
+</body>
+</html>

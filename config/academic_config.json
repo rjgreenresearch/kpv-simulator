@@ -1,0 +1,288 @@
+{
+  "academic_databases": {
+    "orcid": {
+      "enabled": true,
+      "api_base_url": "https://pub.orcid.org/v3.0",
+      "search_endpoint": "/search",
+      "profile_endpoint": "/{orcid_id}/record",
+      "rate_limit_seconds": 2.0,
+      "timeout_seconds": 15,
+      "headers": {
+        "Accept": "application/orcid+xml",
+        "User-Agent": "Academic Research Tool/1.0"
+      },
+      "search_fields": [
+        "given-names",
+        "family-name", 
+        "affiliation-org-name",
+        "credit-name"
+      ],
+      "confidence_weights": {
+        "exact_name_match": 0.4,
+        "affiliation_match": 0.3,
+        "publication_overlap": 0.2,
+        "citation_verification": 0.1
+      }
+    },
+    "google_scholar": {
+      "enabled": true,
+      "base_url": "https://scholar.google.com",
+      "search_endpoint": "/citations",
+      "author_search_params": {
+        "view_op": "search_authors",
+        "hl": "en"
+      },
+      "rate_limit_seconds": 4.0,
+      "timeout_seconds": 20,
+      "headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+      },
+      "max_retries": 3,
+      "retry_delay": 10,
+      "captcha_handling": "skip_on_captcha"
+    },
+    "ssrn": {
+      "enabled": true,
+      "base_url": "https://www.ssrn.com",
+      "search_endpoint": "/en/index.cfm/ssrn-search/",
+      "author_profile_pattern": "/author=([0-9]+)",
+      "rate_limit_seconds": 3.0,
+      "timeout_seconds": 15,
+      "search_params": {
+        "sortBy": "relevance",
+        "classification": "all"
+      }
+    },
+    "web_of_science": {
+      "enabled": false,
+      "note": "Requires institutional access or API key",
+      "api_base_url": "https://api.clarivate.com/apis/wos-starter",
+      "search_endpoint": "/v1/documents",
+      "author_endpoint": "/v1/authors",
+      "rate_limit_seconds": 1.0,
+      "headers": {
+        "X-ApiKey": "YOUR_WOS_API_KEY"
+      }
+    },
+    "researchgate": {
+      "enabled": false,
+      "note": "ResearchGate blocks automated access",
+      "base_url": "https://www.researchgate.net",
+      "rate_limit_seconds": 5.0
+    },
+    "arxiv": {
+      "enabled": true,
+      "base_url": "http://export.arxiv.org/api",
+      "search_endpoint": "/query",
+      "rate_limit_seconds": 3.0,
+      "max_results": 50,
+      "search_fields": [
+        "au", 
+        "ti",
+        "abs"
+      ]
+    }
+  },
+  "cross_reference_settings": {
+    "name_matching": {
+      "similarity_threshold": 0.85,
+      "use_fuzzy_matching": true,
+      "romanization_variants": true,
+      "common_name_variations": {
+        "chinese": ["full_pinyin", "abbreviated_pinyin", "english_name"],
+        "russian": ["transliteration", "english_translation", "abbreviated"],
+        "korean": ["hangul_romanized", "english_name"],
+        "arabic": ["transliteration", "english_name"]
+      }
+    },
+    "affiliation_matching": {
+      "institution_aliases": {
+        "Chinese Academy of Sciences": ["CAS", "中科院", "Chinese Acad Sci"],
+        "Tsinghua University": ["Tsinghua", "清华大学", "THU"],
+        "Beijing University": ["Peking University", "PKU", "北京大学"],
+        "Moscow State University": ["MSU", "МГУ", "Lomonosov"],
+        "Russian Academy of Sciences": ["RAS", "РАН"]
+      },
+      "government_institution_patterns": [
+        "ministry",
+        "department", 
+        "bureau",
+        "administration",
+        "commission",
+        "council"
+      ]
+    },
+    "education_verification": {
+      "degree_patterns": [
+        "PhD", "Ph.D.", "Doctor of Philosophy",
+        "Master", "M.A.", "M.S.", "M.Sc.",
+        "Bachelor", "B.A.", "B.S.", "B.Sc.",
+        "MBA", "J.D.", "M.D.", "LL.M."
+      ],
+      "institution_verification": "cross_check_multiple_sources",
+      "graduation_date_tolerance_years": 5
+    }
+  },
+  "data_enrichment": {
+    "academic_metrics": {
+      "h_index": {
+        "source_priority": ["google_scholar", "orcid", "web_of_science"],
+        "validation": "cross_source_comparison"
+      },
+      "citation_count": {
+        "source_priority": ["google_scholar", "web_of_science", "orcid"],
+        "temporal_adjustment": true,
+        "field_normalization": false
+      },
+      "publication_count": {
+        "exclude_patterns": ["editorial", "erratum", "retraction"],
+        "include_preprints": true
+      }
+    },
+    "network_analysis": {
+      "coauthor_extraction": true,
+      "institutional_networks": true,
+      "collaboration_strength": {
+        "metrics": ["publication_frequency", "citation_overlap", "temporal_proximity"]
+      },
+      "influence_propagation": {
+        "calculate_eigenvector_centrality": true,
+        "weight_by_citations": true
+      }
+    },
+    "biographical_enhancement": {
+      "extract_career_timeline": true,
+      "identify_career_transitions": true,
+      "academic_to_government_transitions": true,
+      "research_area_evolution": true
+    }
+  },
+  "validation_rules": {
+    "academic_profile_confidence": {
+      "high_confidence_threshold": 0.85,
+      "medium_confidence_threshold": 0.65,
+      "low_confidence_threshold": 0.45,
+      "factors": {
+        "name_similarity": 0.3,
+        "affiliation_match": 0.25,
+        "temporal_consistency": 0.2,
+        "cross_source_validation": 0.15,
+        "publication_relevance": 0.1
+      }
+    },
+    "data_quality_checks": {
+      "citation_count_reasonableness": {
+        "max_citations_per_year": 1000,
+        "min_h_index_citation_ratio": 0.5
+      },
+      "publication_timeline_consistency": true,
+      "affiliation_temporal_overlap": true,
+      "degree_progression_logic": true
+    },
+    "duplicate_detection": {
+      "name_variants_same_person": 0.9,
+      "cross_source_deduplication": true,
+      "merge_strategy": "highest_confidence_source"
+    }
+  },
+  "export_enhancements": {
+    "academic_network_formats": [
+      "gephi",
+      "networkx",
+      "cytoscape",
+      "d3_json"
+    ],
+    "visualization_data": {
+      "node_attributes": [
+        "name",
+        "position", 
+        "organization",
+        "citation_count",
+        "h_index",
+        "research_areas",
+        "influence_score"
+      ],
+      "edge_attributes": [
+        "relationship_type",
+        "strength",
+        "collaboration_years",
+        "joint_publications"
+      ]
+    },
+    "timeline_data": {
+      "career_milestones": true,
+      "position_changes": true,
+      "publication_history": true,
+      "award_history": true
+    }
+  },
+  "kvp_integration_enhancements": {
+    "entity_types": {
+      "academic_person": {
+        "base_type": "person",
+        "additional_attributes": [
+          "academic_rank",
+          "research_productivity", 
+          "international_collaboration",
+          "industry_connections",
+          "policy_influence"
+        ]
+      },
+      "research_institution": {
+        "base_type": "organization",
+        "additional_attributes": [
+          "research_output",
+          "collaboration_network",
+          "government_funding",
+          "industry_partnerships"
+        ]
+      }
+    },
+    "relationship_types": {
+      "academic": [
+        "advisor_advisee",
+        "coauthor",
+        "institutional_colleague",
+        "research_collaborator"
+      ],
+      "career": [
+        "academic_to_government",
+        "government_to_academic",
+        "industry_to_government",
+        "cross_sector_consultant"
+      ]
+    },
+    "influence_metrics": {
+      "academic_influence": {
+        "citation_based": 0.4,
+        "collaboration_network": 0.3,
+        "institutional_prestige": 0.2,
+        "policy_impact": 0.1
+      },
+      "government_influence": {
+        "position_authority": 0.5,
+        "policy_responsibility": 0.3,
+        "interagency_connections": 0.2
+      }
+    }
+  },
+  "ethical_guidelines": {
+    "academic_data_use": {
+      "respect_academic_freedom": true,
+      "no_research_content_analysis": true,
+      "focus_on_public_biographical_data": true,
+      "respect_privacy_settings": true
+    },
+    "api_compliance": {
+      "respect_rate_limits": true,
+      "follow_terms_of_service": true,
+      "no_circumvention_of_restrictions": true,
+      "attribute_data_sources": true
+    },
+    "data_retention": {
+      "temporary_processing_only": true,
+      "no_long_term_storage_of_personal_data": true,
+      "anonymize_for_research": true
+    }
+  }
+}

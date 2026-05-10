@@ -1,0 +1,307 @@
+{
+  "research_targets": {
+    "chinese_government": [
+      {
+        "name": "Chinese State Council",
+        "description": "Central government administrative body",
+        "url": "http://english.www.gov.cn/state_council/",
+        "language": "zh-CN",
+        "type": "government",
+        "priority": "high",
+        "selectors": {
+          "leaderList": ".leader-list, .government-leaders, .state-council-members",
+          "name": ".name, .leader-name, .member-name, h3, h4",
+          "title": ".title, .position, .post, .rank",
+          "department": ".department, .ministry, .organization",
+          "biography": ".bio, .description, .profile, .about"
+        },
+        "additional_urls": [
+          "http://english.www.gov.cn/premier/",
+          "http://english.www.gov.cn/state_councilors/",
+          "http://english.www.gov.cn/ministers/"
+        ],
+        "data_quality": 0.9,
+        "update_frequency": "monthly"
+      },
+      {
+        "name": "Chinese Ministry of Defense",
+        "description": "People's Liberation Army leadership",
+        "url": "http://eng.mod.gov.cn/",
+        "language": "zh-CN",
+        "type": "military",
+        "priority": "high",
+        "selectors": {
+          "leaderList": ".leadership-section, .command-structure, .military-leaders",
+          "name": ".commander-name, .officer-name, .general-name",
+          "title": ".rank, .position, .command-title",
+          "department": ".service-branch, .command, .unit",
+          "biography": ".service-record, .profile"
+        },
+        "additional_urls": [
+          "http://eng.mod.gov.cn/leaders/",
+          "http://eng.mod.gov.cn/command/"
+        ],
+        "data_quality": 0.85,
+        "update_frequency": "quarterly"
+      },
+      {
+        "name": "Chinese Communist Party Central Committee",
+        "description": "CCP leadership structure",
+        "url": "http://english.cpc.people.com.cn/",
+        "language": "zh-CN",
+        "type": "party",
+        "priority": "high",
+        "selectors": {
+          "leaderList": ".party-leaders, .central-committee, .politburo",
+          "name": ".leader-name, .member-name, .secretary-name",
+          "title": ".party-position, .committee-role",
+          "department": ".party-organ, .committee"
+        },
+        "data_quality": 0.9,
+        "update_frequency": "yearly"
+      },
+      {
+        "name": "Chinese Ministry of Foreign Affairs",
+        "description": "Diplomatic leadership",
+        "url": "https://www.fmprc.gov.cn/eng/",
+        "language": "zh-CN",
+        "type": "government",
+        "priority": "medium",
+        "selectors": {
+          "leaderList": ".leadership, .diplomatic-corps",
+          "name": ".minister-name, .ambassador-name",
+          "title": ".diplomatic-title, .ministerial-position",
+          "department": ".bureau, .diplomatic-mission"
+        },
+        "data_quality": 0.8,
+        "update_frequency": "quarterly"
+      }
+    ],
+    "russian_government": [
+      {
+        "name": "Russian Federation Government",
+        "description": "Federal government administration",
+        "url": "http://government.ru/en/gov/",
+        "language": "ru",
+        "type": "government",
+        "priority": "high",
+        "selectors": {
+          "leaderList": ".government-members, .cabinet-members, .federal-ministers",
+          "name": ".member-name, .minister-name, h3, h4",
+          "title": ".position, .ministerial-post, .government-role",
+          "department": ".ministry, .federal-agency, .department",
+          "biography": ".biography, .profile, .background"
+        },
+        "additional_urls": [
+          "http://government.ru/en/gov/persons/",
+          "http://government.ru/en/ministries/"
+        ],
+        "data_quality": 0.9,
+        "update_frequency": "monthly"
+      },
+      {
+        "name": "Ministry of Defense of Russia",
+        "description": "Russian Armed Forces leadership",
+        "url": "https://eng.mil.ru/",
+        "language": "ru", 
+        "type": "military",
+        "priority": "high",
+        "selectors": {
+          "leaderList": ".leadership, .command-structure, .general-staff",
+          "name": ".officer-name, .commander-name, .general-name",
+          "title": ".military-rank, .command-position, .staff-position",
+          "department": ".service-branch, .military-district, .command",
+          "biography": ".service-history, .military-background"
+        },
+        "data_quality": 0.85,
+        "update_frequency": "quarterly"
+      },
+      {
+        "name": "Russian Ministry of Foreign Affairs",
+        "description": "Diplomatic leadership",
+        "url": "https://mid.ru/en/",
+        "language": "ru",
+        "type": "government",
+        "priority": "medium",
+        "selectors": {
+          "leaderList": ".diplomatic-leadership, .ministry-leadership",
+          "name": ".minister-name, .deputy-name",
+          "title": ".diplomatic-rank, .ministerial-position",
+          "department": ".diplomatic-department, ".regional-bureau"
+        },
+        "data_quality": 0.8,
+        "update_frequency": "quarterly"
+      },
+      {
+        "name": "Federal Security Service (FSB)",
+        "description": "Security apparatus leadership",
+        "url": "http://www.fsb.ru/fsb/history/",
+        "language": "ru",
+        "type": "security",
+        "priority": "medium",
+        "selectors": {
+          "leaderList": ".leadership-history, .current-leadership",
+          "name": ".director-name, .deputy-director-name",
+          "title": ".security-position, ".agency-role"
+        },
+        "data_quality": 0.7,
+        "update_frequency": "yearly",
+        "notes": "Limited public information available"
+      }
+    ],
+    "other_targets": [
+      {
+        "name": "North Korean Government Portal",
+        "description": "DPRK leadership information",
+        "url": "http://www.korea-dpr.com/",
+        "language": "ko",
+        "type": "government",
+        "priority": "medium",
+        "selectors": {
+          "leaderList": ".leadership, .party-leadership",
+          "name": ".leader-name",
+          "title": ".party-position, ".government-position"
+        },
+        "data_quality": 0.6,
+        "update_frequency": "irregular",
+        "notes": "Limited and infrequently updated information"
+      },
+      {
+        "name": "Iranian Government Portal", 
+        "description": "Islamic Republic leadership",
+        "url": "https://president.ir/en",
+        "language": "fa",
+        "type": "government",
+        "priority": "medium",
+        "selectors": {
+          "leaderList": ".government-officials",
+          "name": ".official-name",
+          "title": ".government-position"
+        },
+        "data_quality": 0.7,
+        "update_frequency": "quarterly"
+      }
+    ]
+  },
+  "scraping_config": {
+    "default_settings": {
+      "rate_limit_seconds": 3.0,
+      "timeout_seconds": 15,
+      "max_retries": 3,
+      "respect_robots_txt": true,
+      "user_agent": "Mozilla/5.0 (Academic Research Bot) Research/1.0",
+      "max_pages_per_source": 5,
+      "delay_between_sources": 10
+    },
+    "language_processing": {
+      "chinese": {
+        "romanization": "pinyin",
+        "translation_service": "google",
+        "fallback_encoding": "utf-8"
+      },
+      "russian": {
+        "romanization": "iso_9_1995",
+        "translation_service": "google",
+        "fallback_encoding": "utf-8"
+      },
+      "korean": {
+        "romanization": "revised_romanization",
+        "translation_service": "google"
+      },
+      "persian": {
+        "romanization": "dmg",
+        "translation_service": "google"
+      }
+    },
+    "data_validation": {
+      "required_fields": ["name", "organization"],
+      "optional_fields": ["title", "department", "biography", "age", "years_in_position"],
+      "confidence_thresholds": {
+        "high": 0.8,
+        "medium": 0.6,
+        "low": 0.4
+      },
+      "max_biography_length": 500,
+      "name_validation_regex": "^[\\w\\s\\-\\u4e00-\\u9fff\\u0400-\\u04ff]+$"
+    }
+  },
+  "kvp_integration": {
+    "entity_types": {
+      "person": {
+        "required_attributes": ["name", "organization", "role_type"],
+        "optional_attributes": ["title", "age", "biography", "years_in_position"],
+        "relationship_types": ["member_of", "reports_to", "supervises", "collaborates_with"]
+      },
+      "organization": {
+        "required_attributes": ["name", "type", "country"],
+        "optional_attributes": ["description", "size", "budget"],
+        "relationship_types": ["parent_of", "subsidiary_of", "affiliated_with"]
+      }
+    },
+    "confidence_scoring": {
+      "factors": {
+        "source_reliability": 0.3,
+        "data_completeness": 0.3,
+        "cross_reference_validation": 0.2,
+        "update_recency": 0.2
+      },
+      "minimum_confidence": 0.5
+    }
+  },
+  "export_formats": {
+    "json": {
+      "include_metadata": true,
+      "unicode_support": true,
+      "compression": false
+    },
+    "csv": {
+      "delimiter": ",",
+      "encoding": "utf-8-sig",
+      "include_headers": true
+    },
+    "kvp_dataset": {
+      "format_version": "1.0",
+      "include_relationships": true,
+      "include_confidence_scores": true,
+      "include_collection_metadata": true
+    }
+  },
+  "ethical_guidelines": {
+    "data_use": "academic_research_only",
+    "retention_policy": "temporary_processing_only",
+    "privacy_protection": "no_private_data_collection",
+    "compliance_requirements": [
+      "respect_robots_txt",
+      "rate_limiting",
+      "no_authentication_bypass",
+      "public_information_only"
+    ],
+    "prohibited_uses": [
+      "real_time_intelligence",
+      "personal_surveillance", 
+      "commercial_exploitation",
+      "malicious_profiling"
+    ]
+  },
+  "quality_assurance": {
+    "validation_rules": {
+      "name_length": {"min": 2, "max": 100},
+      "title_length": {"min": 2, "max": 200},
+      "biography_length": {"min": 10, "max": 500},
+      "required_fields_present": true,
+      "duplicate_detection": true
+    },
+    "data_enrichment": {
+      "romanization_required": true,
+      "translation_to_english": true,
+      "confidence_scoring": true,
+      "source_attribution": true
+    },
+    "error_handling": {
+      "log_failed_extractions": true,
+      "continue_on_error": true,
+      "retry_failed_requests": true,
+      "validate_before_export": true
+    }
+  }
+}

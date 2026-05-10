@@ -10,10 +10,16 @@ import tempfile
 import copy
 import pytest
 
+from pathlib import Path
+
 from kpvs.simulator import KPVSimulator
 from kpvs.optimizer import BenchOptimizer
 from kpvs.reporting import JSONReporter
 from kpvs.reporting_html import HTMLReporter, _build_single_report, _build_comparative_report
+
+# Resolve repo root from this test file's location so subprocess CLI calls
+# work regardless of where pytest is invoked from.
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 FAST_N = 200
 
@@ -138,9 +144,10 @@ class TestHTMLCLIIntegration:
                  "--iterations", "100",
                  "--skip-cascade", "--skip-optimizer",
                  "--html-dir", d, "--no-log-file", "--quiet"],
-                capture_output=True, text=True, cwd="/home/claude/kpv-simulator"
+                capture_output=True, text=True, cwd=str(REPO_ROOT),
             )
-            html_files = [f for root,dirs,files in os.walk(d) for f in files if f.endswith('.html')]
+            html_files = [f for root, dirs, files in os.walk(d)
+                          for f in files if f.endswith('.html')]
             assert len(html_files) >= 1, (
                 f"Expected HTML files, got none. stderr: {result.stderr[:300]}")
 
@@ -149,7 +156,7 @@ class TestHTMLCLIIntegration:
         import subprocess
         result = subprocess.run(
             ["python", "main.py", "--list-orgs", "--no-log-file"],
-            capture_output=True, text=True, cwd="/home/claude/kpv-simulator"
+            capture_output=True, text=True, cwd=str(REPO_ROOT),
         )
         assert result.returncode == 0
         assert "us_nsa" in result.stdout
@@ -164,11 +171,12 @@ class TestHTMLCLIIntegration:
                  "--iterations", "100",
                  "--skip-cascade", "--skip-optimizer",
                  "--html-dir", d, "--no-log-file", "--quiet"],
-                capture_output=True, text=True, cwd="/home/claude/kpv-simulator"
+                capture_output=True, text=True, cwd=str(REPO_ROOT),
             )
             assert result.returncode == 0, (
                 f"--org-set five_eyes failed: {result.stderr[:400]}")
-            html_files = [f for root,dirs,files in os.walk(d) for f in files if f.endswith('.html')]
+            html_files = [f for root, dirs, files in os.walk(d)
+                          for f in files if f.endswith('.html')]
             # Should have individual reports + 1 comparative
             assert len(html_files) >= 2
 
@@ -181,7 +189,7 @@ class TestHTMLCLIIntegration:
                  "--iterations", "100",
                  "--skip-cascade", "--skip-optimizer",
                  "--html-dir", d, "--no-log-file", "--quiet"],
-                capture_output=True, text=True, cwd="/home/claude/kpv-simulator"
+                capture_output=True, text=True, cwd=str(REPO_ROOT),
             )
             assert result.returncode == 0, (
                 f"--org-set adversarial failed: {result.stderr[:400]}")
@@ -192,7 +200,7 @@ class TestHTMLCLIIntegration:
         result = subprocess.run(
             ["python", "main.py", "--org-set", "nonexistent_set",
              "--no-log-file"],
-            capture_output=True, text=True, cwd="/home/claude/kpv-simulator"
+            capture_output=True, text=True, cwd=str(REPO_ROOT),
         )
         # Should exit non-zero with a useful message
         assert result.returncode != 0 or "Unknown" in result.stderr + result.stdout
